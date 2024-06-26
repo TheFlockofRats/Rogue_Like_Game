@@ -51,3 +51,13 @@ class Dungeon:
     @property
     def next(self):
         return self.__next
+
+    def Loot(self):
+        pass
+
+    def Armor(self):
+        pass
+
+    def Weapon(self):
+        pass
+

@@ -89,6 +89,19 @@ class Loot(Item):
     def adjust_stats(self):
         pass
 
+class Creature(Character):
+
+    def __init__(self, char_name):
+        super().__init__(char_name)
+        self.physical_stats = [randint(0, 8), randint(0, 8)]
+        self.magical_stats = [randint(0, 8), randint(0, 8)]
+        x = randint(20, 40)
+        self.health = [x, x]
+        self.equip(Weapon(choice(Weapon.WEAPONS), condition=Condition.GOOD, value=0,
+                          stats=[randint(1,5) for _ in range(4)],
+                          attack_type=(choice(list(AttackType))), damage=randint(2, 12)))
+        self.__gold = randint(0, 25)
+
 if __name__ == "__main__":
     loot_item = Loot("Gold Coin", 100, Condition.EXCELLENT)
     print(loot_item)  # Output: Name: Gold Coin, Value: 100, Condition: EXCELLENT
