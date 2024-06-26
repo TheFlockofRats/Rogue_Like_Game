@@ -12,7 +12,7 @@ class Dungeon:
             raise TypeError
         if not isinstance(description, str) or len(description) < 1:
             raise TypeError
-        
+
         self.__name = name
         self.__description = description
         self.__items: List[Item] = []
@@ -46,7 +46,13 @@ class Dungeon:
     
     @property
     def items(self) -> List[Creature]:
-        return self.__items
+            return self.__items
+
+    @items.setter
+    def items(self, new_items):
+        if self.__items > 0 and self.__items < 4:
+            self.__items = new_items
+
     
     @property
     def next(self):
