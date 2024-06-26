@@ -58,12 +58,26 @@ class Dungeon:
     def next(self):
         return self.__next
 
-    def Loot(self):
-        pass
+    @next.setter
+    def next(self, new_dungeon):
+        self.__next = new_dungeon
 
-    def Armor(self):
-        pass
+    @property
+    def previous(self):
+        return self.__prior
 
-    def Weapon(self):
-        pass
+    @previous.setter
+    def previous(self, previous_dungeon):
+        self.__prior = previous_dungeon
+
+    def show_creatures(self) -> str:
+        return self.__creatures
+
+    def check_creatures(self, creature_name: str) -> bool:
+        if creature_name in self.__creatures:
+            return True
+
+
+
+
 
