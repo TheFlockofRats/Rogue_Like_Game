@@ -13,10 +13,14 @@ class Dungeon:
         if not isinstance(description, str) or len(description) < 1:
             raise TypeError
         
+        if not len(self.__creatures) > 5:
+            self.__creatures: List[Creature] = []
+        else:
+            raise ValueError('Too many Creatures')
+
         self.__name = name
         self.__description = description
         self.__items: List[Item] = []
-        self.__creatures: List[Creature] = []
         self.__prior: Dungeon = None
         self.__next: Dungeon = None
 
@@ -42,12 +46,29 @@ class Dungeon:
     
     @property
     def creatures(self) -> List[Creature]:
-        return self.__creatures
+        if not len(self.__creatures):
+            return self.__creatures
     
     @property
     def items(self) -> List[Creature]:
-        return self.__items
+            return self.__items
+
+    @items.setter
+    def items(self, new_items):
+        if self.__items < 4:
+            self.__items.append(new_items)
+
     
     @property
     def next(self):
         return self.__next
+
+    def Loot(self):
+        pass
+
+    def Armor(self):
+        pass
+
+    def Weapon(self):
+        pass
+
