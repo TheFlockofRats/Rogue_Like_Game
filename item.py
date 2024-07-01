@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
 from enum import Enum
 from typing import List
-from random import randint
 import math
+from random import randint
+from character import Character
 
 
 class Condition(Enum):
@@ -90,59 +91,6 @@ class Loot(Item):
     def adjust_stats(self):
         pass
 
-
-class Armor(Item):
-    def __init__(self, name: str, value: int, condition: Condition, stats: List[int]):
-        super().__init__(name, value, condition)
-        self.__physical_attack_modifier = 0
-        self.__physical_defense_modifier = 0
-        self.__magical_attack_modifier = 0
-        self.__magical_defense_modifier = 0
-        self.__stats = stats
-
-    def set_stats(self, stats: List[int]):
-        self.__physical_attack_modifier = self.__stats[0]
-        self.__physical_defense_modifier = self.__stats[1]
-        self.__magical_attack_modifier = self.__stats[2]
-        self.__magical_defense_modifier = self.__stats[3]
-
-        if len(stats) != 4:
-            raise ValueError
-
-        for i in range(len(stats)):
-            if not isinstance(i, int):
-                raise TypeError
-
-
-    def adjust_stats(self):
-        self.__physical_attack_modifier = math.floor(self.__physical_attack_modifier)
-        self.__physical_defense_modifier = math.floor(self.__physical_defense_modifier)
-        self.__magical_attack_modifier = math.floor(self.__magical_attack_modifier)
-        self.__magical_defense_modifier = math.floor(self.__magical_defense_modifier)
-
-    def item_info(self):
-        return f"Name: {self.name}, Value: {self.value}, Condition: {self.condition.name}, physical_attack_modifier: {self.__physical_attack_modifier}, physical_defense_modifier: {self.__physical_defense_modifier}, magical_attack_modifier: {self.__magical_attack_modifier}, magical_defense_modifier: {self.__magical_defense_modifier}  "
-
-    @property
-    def physical_attack_modifier(self):
-        return self.__physical_attack_modifier
-
-    @property
-    def physical_defense_modifier(self):
-        return self.__physical_defense_modifier
-
-    @property
-    def magical_attack_modifier(self):
-        return self.__magical_attack_modifier
-
-    @property
-    def magical_defense_modifier(self):
-        return self.__magical_defense_modifier
-
-
-
-
-
 class Creature(Character):
 
     def __init__(self, char_name):
@@ -155,9 +103,6 @@ class Creature(Character):
                           stats=[randint(1,5) for _ in range(4)],
                           attack_type=(choice(list(AttackType))), damage=randint(2, 12)))
         self.__gold = randint(0, 25)
-
-
-
 
 if __name__ == "__main__":
     loot_item = Loot("Gold Coin", 100, Condition.EXCELLENT)
