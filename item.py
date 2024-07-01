@@ -139,6 +139,38 @@ class Armor(Item):
     def magical_defense_modifier(self):
         return self.__magical_defense_modifier
 
+class weapon(Item):
+    def __init__(self, name: str, value: int, condition: Condition, stats: List[int], AttackType, damage: int):
+        super().__init__(name, value, condition, stats)
+        self.__attack_type = AttackType
+        self.__damage = damage
+
+    @property
+    def attack_type(self):
+        return self.__attack_type
+
+    @property
+    def dammage(self):
+        return self.__damage
+    
+    @attack_type.setter
+    def attack_type(self, value):
+        self.__attack_type = value
+
+    @dammage.setter
+    def dammage(self, value):
+        if isinstance(value, int):
+            self.__damage = value
+        else:
+            raise ValueError
+        
+    def set_stats(self, stats: List[int]):
+        
+        
+    
+
+
+
 
 
 
