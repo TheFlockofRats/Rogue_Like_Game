@@ -61,7 +61,7 @@ class Item(ABC):
         return f"Name: {self.name}, Value: {self.value}, Condition: {self.condition.name}"
 
     @abstractmethod
-    def stats(self, stats: List[int], int):
+    def set_stats(self, stats: List[int], int):
         pass
 
     @abstractmethod
@@ -88,6 +88,46 @@ class Loot(Item):
     
     def adjust_stats(self):
         pass
+
+
+class Armor(Item):
+    def __init__(self, name: str, value: int, condition: Condition, stats: List[int]):
+        super().__init__(name, value, condition)
+        self.__physical_attack_modifier = 0
+        self.__physical_defense_modifier = 0
+        self.__magical_attack_modifier = 0
+        self.__magical_defense_modifier = 0
+        self.__stats = stats
+
+    def set_stats(self, stats: List[int]):
+        if len(stats) != 4 or 
+        pass
+
+    def adjust_stats(self):
+        pass
+
+    def item_info(self):
+        pass
+
+    @property
+    def physical_attack_modifier(self):
+        return self.__physical_attack_modifier
+
+    @property
+    def physical_defense_modifier(self):
+        return self.__physical_defense_modifier
+
+    @property
+    def magical_attack_modifier(self):
+        return self.__magical_attack_modifier
+
+    @property
+    def magical_defense_modifier(self):
+        return self.__magical_defense_modifier
+
+
+
+
 
 class Creature(Character):
 
