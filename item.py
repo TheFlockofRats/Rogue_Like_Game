@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from enum import Enum
 from typing import List
+from random import randint
 import math
 
 
@@ -141,6 +142,9 @@ class Creature(Character):
                           stats=[randint(1,5) for _ in range(4)],
                           attack_type=(choice(list(AttackType))), damage=randint(2, 12)))
         self.__gold = randint(0, 25)
+
+
+
 
 if __name__ == "__main__":
     loot_item = Loot("Gold Coin", 100, Condition.EXCELLENT)

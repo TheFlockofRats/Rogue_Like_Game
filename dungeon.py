@@ -51,7 +51,7 @@ class Dungeon:
     @items.setter
     def items(self, new_items):
         if self.__items > 0 and self.__items < 4:
-            self.__items = new_items
+            self.__items.append(new_items)
 
     
     @property
