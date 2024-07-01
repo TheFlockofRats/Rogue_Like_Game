@@ -102,6 +102,9 @@ class Creature(Character):
                           attack_type=(choice(list(AttackType))), damage=randint(2, 12)))
         self.__gold = randint(0, 25)
 
+
+
+
 if __name__ == "__main__":
     loot_item = Loot("Gold Coin", 100, Condition.EXCELLENT)
     print(loot_item)  # Output: Name: Gold Coin, Value: 100, Condition: EXCELLENT
