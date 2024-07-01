@@ -101,14 +101,27 @@ class Armor(Item):
         self.__stats = stats
 
     def set_stats(self, stats: List[int]):
-        if len(stats) != 4 or 
-        pass
+        self.__physical_attack_modifier = self.__stats[0]
+        self.__physical_defense_modifier = self.__stats[1]
+        self.__magical_attack_modifier = self.__stats[2]
+        self.__magical_defense_modifier = self.__stats[3]
+
+        if len(stats) != 4:
+            raise ValueError
+
+        for i in range(len(stats)):
+            if not isinstance(i, int):
+                raise TypeError
+
 
     def adjust_stats(self):
-        pass
+        self.__physical_attack_modifier = math.floor(self.__physical_attack_modifier)
+        self.__physical_defense_modifier = math.floor(self.__physical_defense_modifier)
+        self.__magical_attack_modifier = math.floor(self.__magical_attack_modifier)
+        self.__magical_defense_modifier = math.floor(self.__magical_defense_modifier)
 
     def item_info(self):
-        pass
+        return f"Name: {self.name}, Value: {self.value}, Condition: {self.condition.name}, physical_attack_modifier: {self.__physical_attack_modifier}, physical_defense_modifier: {self.__physical_defense_modifier}, magical_attack_modifier: {self.__magical_attack_modifier}, magical_defense_modifier: {self.__magical_defense_modifier}  "
 
     @property
     def physical_attack_modifier(self):
