@@ -135,7 +135,7 @@ class Character(ABC):
             damage = floor(damage * self.__critical_modifier)
         return damage, critical_strike_bool
 
-
+#test
     def take_damage(self, damage) -> None:
         pass
 
