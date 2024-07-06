@@ -16,7 +16,7 @@ class Character(ABC):
         self.__critical_percentage = 1
         self.__critical_modifier = 1.5
         self.__inventory = []
-        self.__equipment = {NO_ARMOR['HEAD', 'BODY', 'HANDS', 'LEGS', 'FEET']}
+        self.__equipment = {'HEAD': NO_ARMOR, 'BODY': NO_ARMOR, 'HANDS': NO_ARMOR, 'LEGS': NO_ARMOR, 'FEET': NO_ARMOR}
         self.__weapon = BARE_HANDS
 
     @property
@@ -137,45 +137,110 @@ class Character(ABC):
 
 #test
     def take_damage(self, damage) -> None:
-        pass
+        temp_health = damage - self.__health[0]
+        if temp_health < 1:
+            raise CharacterDeathException
 
     def attack(self, target: Character) -> str:
         pass
 
     def equip(self, item: Item, position: str = None) -> None:
-        pass
+        if not isinstance(item, Weapon) or not isinstance(item, Armor):
+            raise CannotEquipException
+
+        if isinstance(item, Weapon):
+            self.__inventory.append(self.__weapon)
+            self.__weapon = item
+
+        elif isinstance(item, Armor):
+
+            if position == 'HEAD':
+                self.__inventory.append(self.__equipment[0])
+                self.__equipment[0] = item
+
+            elif position == 'BODY':
+                self.__inventory.append(self.__equipment[1])
+                self.__equipment[1] = item
+
+            elif position == 'HANDS':
+                self.__inventory.append(self.__equipment[2])
+                self.__equipment[2] = item
+
+            elif position == 'LEGS':
+                self.__inventory.append(self.__equipment[3])
+                self.__equipment[3] = item
+
+            elif position == 'FEET':
+                self.__inventory.append(self.__equipment[4])
+                self.__equipment[4] = item
+
+            else:
+                raise CannotEquipException
 
     def pick_up(self, item: Item) -> str:
-        pass
+        self.__inventory.append(item)
+        return f'{item} was picked up'
 
     def drop(self, item: Item) -> (str, Item):
-        pass
+        self.__inventory.remove(item)
+        return f'{item} was dropped'
 
 
 class Warrior(Character):
-    pass
+    def __init__(self, char_name):
+
+        # Warrior Health Stats:
+        rand_num_health = random.randint(10, 20)
+        self.__health[0] += rand_num_health
+        self.__health[1] += rand_num_health
+
+        # Warrior Physical Stats:
+        rand_num_physical = random.randint(1, 4)
+        self.__physical_stats[1] += rand_num_physical
+
+        # Warrior Magical Stats:
+        rand_num_magical = random.randit(0, 2)
+        self.__magical_stats[0] = 0
+        self.__magical_stats[1] -= rand_num_magical
+
 
 class Rouge(Character):
-    def __init__(self, char_name):
-        super().__init__()
+    def __init__(self):
         self.__luck += 10
-        self.__critical_percentage = 0.1
+        self.__critical_percentage = 10
         self.__critical_modifier = 2.5
         self.__health = [20,20]
-
-
-
-
-
+        rand_num_physical = random.randint(1,3)
+        self.__physical_stats[1] -= rand_num_physical
 
 class Mage(Character):
     def __init__(self, char_name):
-        pass
+
 
 
 class priest(Character):
     def __init__(self, char_name):
         pass
+
+class CharacterDeathException(Exception):
+    def __init__(self, character):
+        self.message = f'{character} was slain!'
+        Character.health = [0,25]
+
+class LowMana(Exception):
+    def __init__(self):
+        self.message = f'Mana has been depleted!'
+
+class InvalidTarget(Exception):
+    def __init__(self):
+        self.message = f'You cannot attack this target!'
+
+class CannotEquipException(Exception):
+    def __init__(self):
+        self.message = f'Not a weapon/armor or unable to attach armor to designated location !'
+
+
+
 
 
 
