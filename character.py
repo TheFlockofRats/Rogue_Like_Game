@@ -123,16 +123,14 @@ class Character(ABC):
         pass
 
     def deal_damage(self) -> (int, bool):
-        critical_strike = random.randint(0,100)
-        if critical_strike <= self.__critical_percentage:
-            critical_strike_bool = True
-        else:
-            critical_strike_bool = False
-
         damage = random.randint(1, Weapon.damage)
         rand_num = random.randint(1,100)
         if rand_num <= (self.__critical_percentage + self.__luck):
             damage = floor(damage * self.__critical_modifier)
+            critical_strike_bool = True
+
+        else:
+            critical_strike_bool = False
         return damage, critical_strike_bool
 
 #test
@@ -187,7 +185,8 @@ class Character(ABC):
 
 
 class Warrior(Character):
-    def __init__(self, char_name):
+    def __init__(self, char_name: str):
+        super().__init__(char_name)
 
         # Warrior Health Stats:
         rand_num_health = random.randint(10, 20)
@@ -199,13 +198,14 @@ class Warrior(Character):
         self.__physical_stats[1] += rand_num_physical
 
         # Warrior Magical Stats:
-        rand_num_magical = random.randit(0, 2)
+        rand_num_magical = random.randint(0, 2)
         self.__magical_stats[0] = 0
         self.__magical_stats[1] -= rand_num_magical
 
 
 class Rouge(Character):
-    def __init__(self):
+    def __init__(self, char_name: str):
+        super().__init__(char_name)
         self.__luck += 10
         self.__critical_percentage = 10
         self.__critical_modifier = 2.5
@@ -214,7 +214,38 @@ class Rouge(Character):
         self.__physical_stats[1] -= rand_num_physical
 
 class Mage(Character):
-    def __init__(self, char_name):
+    def __init__(self, char_name: str):
+        super().__init__(char_name)
+
+        rand_num_magical = random.randint(1,3)
+        self.__magical_stats[0] += rand_num_magical
+
+        rand_num_physical = random.randint(0,2)
+        self.__physical_stats[0] = 0
+        self.__physical_stats[1] = 3 - rand_num_physical
+        self.__health = [20, 20]
+        rand_num_mana = random.randint(10, 15)
+        self.__mana[0] += rand_num_mana
+        self.__mana[1] += rand_num_mana
+        self.__weapon = Weapon('Practice Wand', 0, 'GOOD', [0, 0, 0, 0], 'MAGICAL', 2)
+
+    def cast_magic_missile(self, target: Creature) -> str:
+        if self.__mana <= 5:
+            pass
+            # rand_num_damage = random.randint(5, 10)
+            # target.health[0] -= rand_num_damage
+        else:
+            raise LowMana
+
+
+
+    def cast_fire_ball(self, targets: List[Creatures]) -> str:
+        if self.__mana <= 8:
+            pass
+
+        else:
+            raise LowMana
+
 
 
 
