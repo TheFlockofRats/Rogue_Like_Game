@@ -123,7 +123,18 @@ class Character(ABC):
         pass
 
     def deal_damage(self) -> (int, bool):
-        pass
+        critical_strike = random.randint(0,100)
+        if critical_strike <= self.__critical_percentage:
+            critical_strike_bool = True
+        else:
+            critical_strike_bool = False
+
+        damage = random.randint(1, Weapon.damage)
+        rand_num = random.randint(1,100)
+        if rand_num <= (self.__critical_percentage + self.__luck):
+            damage = floor(damage * self.__critical_modifier)
+        return damage, critical_strike_bool
+
 
     def take_damage(self, damage) -> None:
         pass
@@ -131,7 +142,7 @@ class Character(ABC):
     def attack(self, target: Character) -> str:
         pass
 
-    def equip(self, item: Item, position: str=None) -> None:
+    def equip(self, item: Item, position: str = None) -> None:
         pass
 
     def pick_up(self, item: Item) -> str:
@@ -141,20 +152,30 @@ class Character(ABC):
         pass
 
 
-class Warrior:
+class Warrior(Character):
     pass
 
+class Rouge(Character):
+    def __init__(self, char_name):
+        super().__init__()
+        self.__luck += 10
+        self.__critical_percentage = 0.1
+        self.__critical_modifier = 2.5
+        self.__health = [20,20]
 
-class Rouge:
-    pass
 
 
-class Mage:
-    pass
 
 
-class priest:
-    pass
+
+class Mage(Character):
+    def __init__(self, char_name):
+        pass
+
+
+class priest(Character):
+    def __init__(self, char_name):
+        pass
 
 
 
