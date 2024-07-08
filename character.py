@@ -116,6 +116,7 @@ class Character(ABC):
         self.__equipment = {'HEAD': NO_ARMOR, 'BODY': NO_ARMOR, 'HANDS': NO_ARMOR, 'LEGS': NO_ARMOR, 'FEET': NO_ARMOR}
         self.__weapon = BARE_HANDS
 
+
     @property
     def name(self):
         # Returns self.__name
@@ -231,8 +232,9 @@ class Character(ABC):
         pass
 
     def deal_damage(self) -> (int, bool):
-        damage = random.randint(1, Weapon.damage)
-        rand_num = random.randint(1,100)
+        d = Weapon.damage
+        damage = random.randint(1, d)
+        rand_num = random.randint(1, 100)
         if rand_num <= (self.__critical_percentage + self.__luck):
             damage = floor(damage * self.__critical_modifier)
             critical_strike_bool = True
@@ -278,12 +280,6 @@ class Character(ABC):
                     return f'{target} lost {damage} health and died from {self.__name}!'
                 else:
                     return f'{target} lost {damage} health from {self.__name}!'
-
-
-
-
-
-
 
     def equip(self, item: Item, position: str = None) -> None:
         if not isinstance(item, Weapon) or not isinstance(item, Armor):
@@ -392,7 +388,7 @@ class Mage(Character):
         rand_num_mana = random.randint(10, 15)
         self.__mana[0] += rand_num_mana
         self.__mana[1] += rand_num_mana
-        self.__weapon = Weapon('Practice Wand', 0, 'GOOD', [0, 0, 0, 0], 'MAGICAL', 2)
+        self.__weapon = Weapon('Practice Wand', 0, Condition.GOOD, [0, 0, 0, 0], AttackType.MAGICAL, 2)
 
     def cast_magic_missile(self, target: Creature) -> str:
         rand_damage = random.randint(5, 10)
@@ -410,16 +406,18 @@ class Mage(Character):
         if self.__mana[0] >= 8:
             for i in range(len(target)):
                 target[i].health[0] -= rand_damage
+                return f'{self.__name} dealt {rand_damage} damage using FireBall'
         else:
-            raise LowMana('Gandalf ran out of mana because he is old and weak')
+            raise LowMana(f'{self.__name} ran out of mana because he is old and weak')
 
     def Thunderbolt(self, target: Creature):
         rand_damage = random.randint(6, 8)
         if self.__mana[0] >= 3:
             target.health[0] -= rand_damage
             self.__mana[0] -= 3
+            return f'{self.__name} dealt {rand_damage} damage using Thunderbolt'
         else:
-            raise LowMana('Gandalf ran out of mana because he is old and weak')
+            raise LowMana(f'{self.__name} ran out of mana because he is old and weak')
 
 
 
@@ -462,20 +460,21 @@ class priest(Character):
             return f'Pastor Joe is out of mana and croaked'
 
 
-
-
 class CharacterDeathException(Exception):
     def __init__(self, character):
         self.message = f'{character} was slain!'
         Character.health = [0, 25]
 
+
 class LowMana(Exception):
     def __init__(self):
         pass
 
+
 class InvalidTarget(Exception):
     def __init__(self):
         pass
+
 
 class CannotEquipException(Exception):
     def __init__(self):
