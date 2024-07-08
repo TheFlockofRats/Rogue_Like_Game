@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from math import floor
 
+from dungeon import Creature
 from item import Item, Armor, Weapon, Condition, AttackType
 import random
 
@@ -241,7 +242,7 @@ class Mage(Character):
 
 
 
-    def cast_fire_ball(self, targets: list[Creatures]) -> str:
+    def cast_fire_ball(self, targets: list[Creature]) -> str:
         if self.__mana <= 8:
             pass
 
