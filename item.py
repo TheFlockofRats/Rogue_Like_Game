@@ -4,6 +4,9 @@ from typing import List
 import math
 
 class Condition(Enum):
+    """
+    Enum for item condition.
+    """
     EXCELLENT = 1
     GOOD = 2
     ACCEPTABLE = 3
@@ -12,12 +15,26 @@ class Condition(Enum):
 
 
 class AttackType(Enum):
+    """
+    Enum for attack types.
+    """
     PHYSICAL = 1
     MAGICAL = 2
 
 
 class Item(ABC):
+    """
+    Abstract base class for an item.
+    """
     def __init__(self, name: str, value: int, condition: Condition):
+        """
+        Initialize an Item.
+
+        Args:
+            name (str): The name of the item.
+            value (int): The value of the item.
+            condition (Condition): The condition of the item.
+        """
         if not isinstance(name, str) or len(name) < 1:
             raise ValueError
         if not isinstance(value, int) or value < 0:
@@ -31,56 +48,97 @@ class Item(ABC):
 
     @property
     def name(self):
+        """
+        Get the name of the item.
+        """
         return self.__name
     
     @name.setter
     def name(self, value):
+        """
+        Set the name of the item.
+        """
         if not isinstance(value, str) or len(value) < 1:
             raise ValueError
         self.__name = value
     
     @property
     def value(self):
+        """
+        Get the value of the item.
+        """
         return self.__value
     
     @value.setter
     def value(self, value):
+        """
+        Set the value of the item.
+        """
         if not isinstance(value, int) or value < 0:
             raise ValueError
         self.__value = value
     
     @property
     def condition(self):
+        """
+        Get the condition of the item.
+        """
         return self.__condition
     
     @condition.setter
     def condition(self, value):
+        """
+        Set the condition of the item.
+        """
         if not isinstance(value, Condition):
             raise TypeError
         self.__condition = value
 
     def __str__(self):
+        """
+        Return a string description of the item.
+        """
         return f"Item: {self.name}, Value: {self.value}, Condition: {self.condition.name}"
     
     @abstractmethod
     def item_info(self) -> str:
+        """
+        Abstract method for item information.
+        """
         pass 
 
     @abstractmethod
     def set_stats(self, stats: List[int]):
+        """
+        Abstract method to set item stats.
+        """
         pass
 
     @abstractmethod
     def adjust_stats(self):
+        """
+        Abstract method to adjust item stats.
+        """
         pass
 
 
 class Loot(Item):
-
+    """
+    Class representing loot items.
+    """
     def item_info(self):
+        """
+        Provides information about the loot item.
+        """
         return super().__str__()
 
     def set_stats(self, stats: int):
+        """
+        Set stats for the loot item.
+
+        Args:
+            stats (int): The base value for the loot item.
+        """
         if not isinstance(stats, int):
             raise ValueError
         
@@ -96,11 +154,26 @@ class Loot(Item):
             self.value = math.floor(stats * 0.1)
     
     def adjust_stats(self):
+        """
+        Adjust stats for the loot item.
+        """
         pass
 
 
 class Armor(Item):
+    """
+    Class representing armor items.
+    """
     def __init__(self, name: str, value: int, condition: Condition, stats: List[int]):
+        """
+        Initialize an Armor item.
+
+        Args:
+            name (str): The name of the armor item.
+            value (int): The value of the armor item.
+            condition (Condition): The condition of the armor item.
+            stats (List[int]): List of stat values [physical_attack, physical_defense, magical_attack, magical_defense].
+        """
         super().__init__(name, value, condition)
         self.__physical_attack_modifier = 0
         self.__physical_defense_modifier = 0
@@ -110,6 +183,9 @@ class Armor(Item):
 
     @property
     def physical_attack(self):
+        """
+        Get the physical attack modifier of the armor.
+        """
         return self.__physical_attack_modifier
 
     @property
