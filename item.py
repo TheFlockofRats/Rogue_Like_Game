@@ -338,6 +338,10 @@ class Weapon(Item):
         """
         super().__init__(name, value, condition)
         self.__attack_type = attack_type
+        if not isinstance(damage, int):
+            raise TypeError
+        if damage < 0:
+            raise ValueError
         self.__damage = damage
         self.set_stats(stats)
 
