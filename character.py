@@ -38,6 +38,10 @@ class Character(ABC):
     self.__weapon: Weapon
         This is the character's equipped weapon
 
+    Methods
+    -------
+    
+
 
 
     """
