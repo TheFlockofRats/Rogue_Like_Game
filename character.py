@@ -1,4 +1,6 @@
 from abc import ABC, abstractmethod
+from math import floor
+
 from item import Item, Armor, Weapon, Condition, AttackType
 import random
 
@@ -28,10 +30,10 @@ class Character(ABC):
         NO_ARMOR = Armor('N/A', 0, Condition.GOOD, [0, 0, 0, 0])
         BARE_HANDS = Weapon('Bare hands', 0, Condition.GOOD, [0, 0, 0, 0], AttackType.PHYSICAL, 2)
         self.__name = char_name
-        self.__health = [25,25]
-        self.__mana = [20,20]
-        self.__physical_stats = [3,3]
-        self.__magical_stats = [3,3]
+        self.__health = [25, 25]
+        self.__mana = [20, 20]
+        self.__physical_stats = [3, 3]
+        self.__magical_stats = [3, 3]
         self.__luck = 5 + random.randint(-5, 5)
         self.__critical_percentage = 1
         self.__critical_modifier = 1.5
@@ -259,19 +261,16 @@ class Mage(Character):
 
 
 
-    def cast_fire_ball(self, targets: List[Creatures]) -> str:
+    def cast_fire_ball(self, targets: list[Creatures]) -> str:
         if self.__mana <= 8:
             pass
 
         else:
             raise LowMana
 
-
-
-
 class priest(Character):
     def __init__(self, char_name):
-        pass
+        super().__init__(char_name)
 
 class CharacterDeathException(Exception):
     def __init__(self, character):
