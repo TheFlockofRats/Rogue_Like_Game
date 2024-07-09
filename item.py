@@ -316,7 +316,7 @@ class Weapon(Armor):
         Args:
             stats (List[int]): List of stat values [physical_attack, physical_defense, magical_attack, magical_defense, damage].
         """
-        if len(stats) != 4:
+        if len(stats) != 5:
             raise ValueError
         for i in stats:
             if not isinstance(i, int):
@@ -324,25 +324,43 @@ class Weapon(Armor):
         super().set_stats(stats[:-1])
         self.__damage = stats[-1]
 
+    def adjust_stats(self):
+        """Adjust stats for the weapon item based on its condition."""
+        super().adjust_stats()
 
+        if self.condition == Condition.EXCELLENT:
+            modifier = 1.25
+        elif self.condition == Condition.GOOD:
+            modifier = 1.0
+        elif self.condition == Condition.ACCEPTABLE:
+            modifier = 0.8
+        elif self.condition == Condition.BAD:
+            modifier = 0.5
+        elif self.condition == Condition.ABYSMAL:
+            modifier = 0.25
+        
+        self.__damage = math.floor(self.__damage * modifier)
+
+    def item_info(self) -> str:
+        """Provide detailed information about the weapon item."""
+        info = super().item_info()
+        info += f", Attack Type: {self.attack_type.name}, Damage: {self.damage}"
+        return info
+    
+# Example usage
 if __name__ == "__main__":
-    # Create a Loot item
-    loot_item = Loot("Ancient Coin", 100, Condition.EXCELLENT)
-    print(loot_item.item_info())  # Output: Item: Ancient Coin, Value: 100, Condition: EXCELLENT
+    # Create a Weapon item
+    weapon_item = Weapon("Excalibur", 1000, Condition.GOOD, [15, 10, 20, 5], AttackType.PHYSICAL, 50)
+    print(weapon_item.item_info())
+    # Output: Item: Excalibur, Value: 1000, Condition: GOOD, Physical Attack: 15, Physical Defense: 10, Magical Attack: 20, Magical Defense: 5, Attack Type: PHYSICAL, Damage: 50
 
-    # Modify the stats of the Loot item based on its condition
-    loot_item.set_stats(100)
-    print(loot_item.item_info())  # Output: Item: Ancient Coin, Value: 125, Condition: EXCELLENT
+    # Adjust the stats of the Weapon item based on its condition
+    weapon_item.adjust_stats()
+    print(weapon_item.item_info())
+    # Output: Item: Excalibur, Value: 1000, Condition: GOOD, Physical Attack: 15, Physical Defense: 10, Magical Attack: 20, Magical Defense: 5, Attack Type: PHYSICAL, Damage: 50
 
-    # Create an Armor item
-    armor_item = Armor("Knight's Armor", 500, Condition.GOOD, [10, 20, 5, 15])
-    print(armor_item.item_info())  # Output: Item: Knight's Armor, Value: 500, Condition: GOOD, Physical Attack: 10, Physical Defense: 20, Magical Attack: 5, Magical Defense: 15
-
-    # Adjust the stats of the Armor item based on its condition
-    armor_item.adjust_stats()
-    print(armor_item.item_info())  # Output: Item: Knight's Armor, Value: 500, Condition: GOOD, Physical Attack: 10, Physical Defense: 20, Magical Attack: 5, Magical Defense: 15
-
-    # Change the condition of the Armor item and adjust stats again
-    armor_item.condition = Condition.BAD
-    armor_item.adjust_stats()
-    print(armor_item.item_info())  # Output: Item: Knight's Armor, Value: 500, Condition: BAD, Physical Attack: 5, Physical Defense: 10, Magical Attack: 2, Magical Defense: 7
+    # Change the condition of the Weapon item and adjust stats again
+    weapon_item.condition = Condition.BAD
+    weapon_item.adjust_stats()
+    print(weapon_item.item_info())
+    # Output: Item: Excalibur, Value: 1000, Condition: BAD, Physical Attack: 7, Physical Defense: 5, Magical Attack: 10, Magical Defense: 2, Attack Type: PHYSICAL, Damage: 25
