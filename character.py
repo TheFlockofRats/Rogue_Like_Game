@@ -22,6 +22,21 @@ class Character(ABC):
     self.__mana: List[int]
         The character's temporary mana and maximum mana are stored here as a list of integers.
     self.__physical_stats: List[int]
+        The character's physical attack modifier and physical defense modifier are stored as a list of integers
+    self.__magical_stats: List[int]
+        tThe character's magical attack modifier and magical defense modifier stored as a list of integers
+    self.__luck: int
+        An integer that act's as a modifier used to determine the success of a critical strike.
+    self.__critical_percentage: int
+        This is the character's percentage chance to land a critical strike.
+    self.___critical_modifier: float
+        This is the character's damage multiplier when a critical strike is landed.
+    self.__inventory: List[Item]
+        This is the character's inventory where unequipped items are stored.
+    self.__equipment: Dict[str, Armor]
+        This is a dictionary representing a character's equipped items.
+    self.__weapon: Weapon
+        This is the character's equipped weapon
 
 
 
