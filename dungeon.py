@@ -1,7 +1,6 @@
 from typing import List
 """
 fix still Self.__prior should be self.__previous
-
 """
 
 class Item:

@@ -4,6 +4,26 @@ import random
 
 
 class Character(ABC):
+    """ A class that creates the board for the game
+    ...
+
+    Attributes
+    ----------
+    NO_ARMOR:
+        Set to the following - Armor('N/A', 0, Condition.GOOD, [0, 0, 0, 0])
+    BARE_HANDS:
+        Set to the following - Weapon('Bare hands, 0, Condition.GOOD, [0, 0, 0, 0], AttackType.PHYSICAL, 2)
+    Self.__name: str
+        The character's name, must be a non-empty string
+    self.__health: List[int]
+        The character's temporary health and maximum health are stored here, this is a 2 element list and must be ints
+    self.__mana: List[int]
+        The character's temporary mana and maximum mana are stored here as a list of integers.
+    self.__physical_stats: List[int]
+
+
+
+    """
     def __init__(self, char_name: str):
         NO_ARMOR = Armor('N/A', 0, Condition.GOOD, [0, 0, 0, 0])
         BARE_HANDS = Weapon('Bare hands', 0, Condition.GOOD, [0, 0, 0, 0], AttackType.PHYSICAL, 2)
