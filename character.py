@@ -268,12 +268,6 @@ class Character(ABC):
                 else:
                     return f'{target} lost {damage} health from {self.__name}!'
 
-
-
-
-
-
-
     def equip(self, item: Item, position: str = None) -> None:
         if not isinstance(item, Weapon) or not isinstance(item, Armor):
             raise CannotEquipException
