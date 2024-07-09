@@ -258,7 +258,7 @@ class Weapon(Armor):
     Class representing weapon items.
     """
     def __init__(self, name: str, value: int, condition: Condition, stats: List[int], attack_type: AttackType, damage: int):
-                """
+        """
         Initialize a Weapon item.
 
         Args:
@@ -279,25 +279,43 @@ class Weapon(Armor):
 
     @property
     def attack_type(self):
+        """
+        Get the attack type of the weapon.
+        """
         return self.__attack_type
     
     @attack_type.setter
     def attack_type(self, attack_type: AttackType):
+        """
+        Set the attack type of the weapon.
+        """
         if not isinstance(attack_type, AttackType):
             raise TypeError
         self.__attack_type = attack_type
     
     @property
     def damage(self):
+        """
+        Get the damage of the weapon.
+        """
         return self.__damage
     
     @damage.setter
     def damage(self, damage: int):
+        """
+        Set the damage of the weapon.
+        """
         if not isinstance(damage, int):
             raise ValueError
         self.__damage = damage
     
     def set_stats(self, stats: List[int]):
+        """
+        Set stats for the weapon item.
+
+        Args:
+            stats (List[int]): List of stat values [physical_attack, physical_defense, magical_attack, magical_defense, damage].
+        """
         if len(stats) != 4:
             raise ValueError
         for i in stats:
