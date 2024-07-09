@@ -1,16 +1,19 @@
 from abc import ABC, abstractmethod
 from math import floor
 
+
 from item import Item, Armor, Weapon, Condition, AttackType
 import random
 
 
 class Character(ABC):
-    """ A class that creates the board for the game
+    """ A class that creates the character's for the game
     ...
 
     Attributes
     ----------
+    __init__(self, char_name: str)
+            This is the constructor for a base character without any modifications
     NO_ARMOR:
         Set to the following - Armor('N/A', 0, Condition.GOOD, [0, 0, 0, 0])
     BARE_HANDS:
@@ -38,10 +41,67 @@ class Character(ABC):
     self.__weapon: Weapon
         This is the character's equipped weapon
 
+    Methods
+    -------
+    phys_attack_modifier(self) -> int
+        This method will return an integer that totals the physical attack of a character, and modifiers from character's items
+    phys_defense_modifier(self) -> int
+        This method does the same as the phys_attack_modifier, but for physical defense instead
+    magic_attack_modifier(self) -> int
+        This method will return an integer that totals the magical attack of a character, and modifiers from character's items
+    magic_defense_modifier(self) -> int
+        This method like the magic_attack_modifier, does the same, but with magic defense instead.
+    deal_damage(self) -> (int, bool)
+        This method returns the total damage that would be dealt when an attack is successful and a boolean that represents if a critical strike was made
+    take_damage(self, damage) -> None
+        This method subtracts the damage from the temporary health of the character.
+    attack(self, target: Character) -> str
+        This method determines whether or not a character can attack a Creature, if so it will determine how much damage
+    equip(self, item: Item, position: str=None) -> None
+        This method passes in an Item that is either Armor or a Weapon and a position on the body to place the Item.
+    pick_up(self, item: Item) -> str
+        Puts an item into the Character's __inventory and returns a string to indicate it was picked up
+    drop(self, item: Item) -> (str, Item)
+        Removes an item from a Character's __inventory and returns it with a string to indicate that it was dropped.
 
-
+    Exception's
+    -------
+    CharacterDeathException
+        Allows a character that has or is going to below zero to have its slain message string set and its temp health set to zero
     """
     def __init__(self, char_name: str):
+        """
+        Parameters
+        ----------
+        __init__(self, char_name: str)
+            This is the constructor for a base character without any modifications
+        NO_ARMOR:
+            Set to the following - Armor('N/A', 0, Condition.GOOD, [0, 0, 0, 0])
+        BARE_HANDS:
+            Set to the following - Weapon('Bare hands, 0, Condition.GOOD, [0, 0, 0, 0], AttackType.PHYSICAL, 2)
+        Self.__name: str
+            The character's name, must be a non-empty string
+        self.__health: List[int]
+            The character's temporary health and maximum health are stored here, this is a 2 element list and must be ints
+        self.__mana: List[int]
+            The character's temporary mana and maximum mana are stored here as a list of integers.
+        self.__physical_stats: List[int]
+            The character's physical attack modifier and physical defense modifier are stored as a list of integers
+        self.__magical_stats: List[int]
+            tThe character's magical attack modifier and magical defense modifier stored as a list of integers
+        self.__luck: int
+            An integer that act's as a modifier used to determine the success of a critical strike.
+        self.__critical_percentage: int
+            This is the character's percentage chance to land a critical strike.
+        self.___critical_modifier: float
+            This is the character's damage multiplier when a critical strike is landed.
+        self.__inventory: List[Item]
+            This is the character's inventory where unequipped items are stored.
+        self.__equipment: Dict[str, Armor]
+            This is a dictionary representing a character's equipped items.
+        self.__weapon: Weapon
+            This is the character's equipped weapon
+        """
         NO_ARMOR = Armor('N/A', 0, Condition.GOOD, [0, 0, 0, 0])
         BARE_HANDS = Weapon('Bare hands', 0, Condition.GOOD, [0, 0, 0, 0], AttackType.PHYSICAL, 2)
         self.__name = char_name
@@ -55,6 +115,7 @@ class Character(ABC):
         self.__inventory = []
         self.__equipment = {'HEAD': NO_ARMOR, 'BODY': NO_ARMOR, 'HANDS': NO_ARMOR, 'LEGS': NO_ARMOR, 'FEET': NO_ARMOR}
         self.__weapon = BARE_HANDS
+
 
     @property
     def name(self):
@@ -160,8 +221,9 @@ class Character(ABC):
         pass
 
     def deal_damage(self) -> (int, bool):
-        damage = random.randint(1, Weapon.damage)
-        rand_num = random.randint(1,100)
+        d = Weapon.damage
+        damage = random.randint(1, d)
+        rand_num = random.randint(1, 100)
         if rand_num <= (self.__critical_percentage + self.__luck):
             damage = floor(damage * self.__critical_modifier)
             critical_strike_bool = True
@@ -176,8 +238,37 @@ class Character(ABC):
         if temp_health < 1:
             raise CharacterDeathException
 
-    def attack(self, target: Character) -> str:
-        pass
+    def attack(self, target: Character, damage, critical_strike_bool) -> str:
+        attacker = random.randint(1, 20)
+        defender = random.randint(1, 20)
+        if Weapon.attack_type == 1:
+            attacker += Armor.physical_attack
+            attacker += Armor.physical_defense
+
+            defender += Armor.physical_attack
+            defender += Armor.physical_defense
+
+        elif Weapon.attack_type == 2:
+            attacker += Armor.magical_attack
+            attacker += Armor.magical_defense
+
+            defender += Armor.magical_attack
+            defender += Armor.magical_defense
+
+        if critical_strike_bool is True:
+
+            if attacker >= defender:
+                target.deal_damage()
+                if target.health[0] <= 0:
+                    return f'{target} lost {damage} health and died with a critical hit from {self.__name}!'
+                else:
+                    return f'{target} lost {damage} health with a critical hit from {self.__name}!'
+
+            else:
+                if target.health[0] <= 0:
+                    return f'{target} lost {damage} health and died from {self.__name}!'
+                else:
+                    return f'{target} lost {damage} health from {self.__name}!'
 
     def equip(self, item: Item, position: str = None) -> None:
         if not isinstance(item, Weapon) or not isinstance(item, Armor):
@@ -221,6 +312,20 @@ class Character(ABC):
         return f'{item} was dropped'
 
 
+class Creature(Character):
+
+    def __init__(self, char_name):
+        super().__init__(char_name)
+        self.physical_stats = [random.randint(0, 8), random.randint(0, 8)]
+        self.magical_stats = [random.randint(0, 8), random.randint(0, 8)]
+        x = random.randint(20, 40)
+        self.health = [x, x]
+        self.equip(Weapon(random.choice(Weapon.WEAPONS), condition=Condition.GOOD, value=0,
+                          stats=[random.randint(1,5) for _ in range(4)],
+                          attack_type=(random.choice(list(AttackType))), damage=random.randint(2, 12)))
+        self.__gold = random.randint(0, 25)
+
+
 class Warrior(Character):
     def __init__(self, char_name: str):
         super().__init__(char_name)
@@ -238,6 +343,14 @@ class Warrior(Character):
         rand_num_magical = random.randint(0, 2)
         self.__magical_stats[0] = 0
         self.__magical_stats[1] -= rand_num_magical
+
+    def karate_kick(self, target: Creature):
+        if self.__mana[0] >= 2:
+            target.health[0] -= 3
+            self.__mana[0] -= 2
+            return f'{3} damage has been dealt to {target}'
+        else:
+            raise LowMana('Karate Kid ran out of stamina because he wrote too much code for this project')
 
 
 class Rouge(Character):
@@ -264,46 +377,97 @@ class Mage(Character):
         rand_num_mana = random.randint(10, 15)
         self.__mana[0] += rand_num_mana
         self.__mana[1] += rand_num_mana
-        self.__weapon = Weapon('Practice Wand', 0, 'GOOD', [0, 0, 0, 0], 'MAGICAL', 2)
+        self.__weapon = Weapon('Practice Wand', 0, Condition.GOOD, [0, 0, 0, 0], AttackType.MAGICAL, 2)
 
     def cast_magic_missile(self, target: Creature) -> str:
-        if self.__mana <= 5:
-            pass
-            # rand_num_damage = random.randint(5, 10)
-            # target.health[0] -= rand_num_damage
+        rand_damage = random.randint(5, 10)
+        if self.__mana[0] >= 5:
+            target.health[0] -= rand_damage
+            self.__mana[0] -= 5
+            return f'{rand_damage} damage has been dealt to {target}'
         else:
-            raise LowMana
+            raise LowMana('Gandalf ran out of mana because he is old and weak')
 
 
 
-    def cast_fire_ball(self, targets: list[Creatures]) -> str:
-        if self.__mana <= 8:
-            pass
-
+    def cast_fire_ball(self, target: list[Creature]) -> str:
+        rand_damage = random.randint(10, 25)
+        if self.__mana[0] >= 8:
+            for i in range(len(target)):
+                target[i].health[0] -= rand_damage
+                return f'{self.__name} dealt {rand_damage} damage using FireBall'
         else:
-            raise LowMana
+            raise LowMana(f'{self.__name} ran out of mana because he is old and weak')
+
+    def Thunderbolt(self, target: Creature):
+        rand_damage = random.randint(6, 8)
+        if self.__mana[0] >= 3:
+            target.health[0] -= rand_damage
+            self.__mana[0] -= 3
+            return f'{self.__name} dealt {rand_damage} damage using Thunderbolt'
+        else:
+            raise LowMana(f'{self.__name} ran out of mana because he is old and weak')
+
+
+
 
 class priest(Character):
     def __init__(self, char_name):
         super().__init__(char_name)
 
+    def heal(self, target) -> str:
+        rand_heal = random.randint(1, 8)
+        if target.health[0] != 0:
+            if self.__mana[0] >= 4:
+                target.health[0] += rand_heal
+                self.__mana[0] -= 4
+                return f'{target} gained {rand_heal} health!'
+            else:
+                raise InvalidTarget(f'{target} cannot be healed!')
+        else:
+            raise InvalidTarget(f'{target} cannot be healed!')
+
+    def resurrect(self, target):
+        if target.health[0] == 0:
+            if self.__mana[0] >= 10:
+                half_health = floor(target.health[1] / 2)
+                target.health[0] += half_health
+                self.__mana[0] -= 10
+                return f'{target} was resurrected from the dead!'
+            else:
+                return f'Not enough mana!'
+        else:
+            return f'{target} is not dead!'
+
+    def manage_perish_affairs(self):
+        if self.__mana[0] >= 15:
+            self.__health[0] += 10
+            self.__health[1] += 10
+            self.__mana[0] -= 15
+            return f'Pastor Joe feels 20 years younger'
+        else:
+            return f'Pastor Joe is out of mana and croaked'
+
+
 class CharacterDeathException(Exception):
     def __init__(self, character):
         self.message = f'{character} was slain!'
-        Character.health = [0,25]
+        Character.health = [0, 25]
+
 
 class LowMana(Exception):
     def __init__(self):
-        self.message = f'Mana has been depleted!'
+        pass
+
 
 class InvalidTarget(Exception):
     def __init__(self):
-        self.message = f'You cannot attack this target!'
+        pass
+
 
 class CannotEquipException(Exception):
     def __init__(self):
-        self.message = f'Not a weapon/armor or unable to attach armor to designated location !'
-
+        pass
 
 
 
