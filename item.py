@@ -153,9 +153,6 @@ class Item(ABC):
 class Loot(Item):
     """
     Class representing loot, inheriting from Item.
-
-    Attributes:
-        Inherits attributes from Item class.
     """
 
     def item_info(self) -> str:
@@ -482,6 +479,10 @@ class Weapon(Item):
 
 
 if __name__ == "__main__":
-    weapon_item = Weapon("Excalibur", 200, Condition.ACCEPTABLE, [30, 20, 5, 10], AttackType.PHYSICAL, 50)
+    # cool = Loot("Diamond Sword", 200, Condition.GOOD)
+    # print(cool.item_info())
+    weapon_item = Weapon("Fire Sword", 200, Condition.EXCELLENT, [11, 20, 5, 10], AttackType.MAGICAL, 200)
+    print(weapon_item.item_info())
+    print("-----------------------------------------------")
     weapon_item.adjust_stats()
     print(weapon_item.item_info())
