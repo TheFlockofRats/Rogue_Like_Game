@@ -7,7 +7,7 @@ import random
 
 
 class Character(ABC):
-    """ A class that creates the board for the game
+    """ A class that creates the character's for the game
     ...
 
     Attributes
