@@ -118,6 +118,7 @@ class Character(ABC):
 
     @property
     def name(self):
+        # Returns self.__name
         return self.__name
 
     @name.setter
@@ -127,6 +128,7 @@ class Character(ABC):
 
     @property
     def health(self):
+        # Returns self.__health
         return self.__health
 
     @health.setter
@@ -136,6 +138,7 @@ class Character(ABC):
 
     @property
     def mana(self):
+        # Returns self.__mana
         return self.__mana
 
     @mana.setter
@@ -145,6 +148,7 @@ class Character(ABC):
 
     @property
     def physical_stats(self):
+        # Returns self.__physical_stats
         return self.__physical_stats
 
     @physical_stats.setter
@@ -153,6 +157,7 @@ class Character(ABC):
 
     @property
     def magical_stats(self):
+        # Returns self.__magical_stats
         return self.__magical_stats
 
     @magical_stats.setter
@@ -161,6 +166,7 @@ class Character(ABC):
 
     @property
     def luck(self):
+        # Returns self.__magical_stats
         return self.__luck
 
     @luck.setter
@@ -169,6 +175,7 @@ class Character(ABC):
 
     @property
     def critical_percentage(self):
+        # Returns self.__critical_percentage
         return self.__critical_percentage
 
     @critical_percentage.setter
@@ -177,6 +184,7 @@ class Character(ABC):
 
     @property
     def critical_modifier(self):
+        # Returns self.__critical_modifier
         return self.__critical_modifier
 
     @critical_modifier.setter
@@ -185,6 +193,7 @@ class Character(ABC):
 
     @property
     def inventory(self):
+        # Returns self.__critical_modifier
         return self.__inventory
 
     @inventory.setter
@@ -193,6 +202,7 @@ class Character(ABC):
 
     @property
     def equipment(self):
+        # Returns self.__equipment
         return self.__equipment
 
     @equipment.setter
@@ -201,6 +211,7 @@ class Character(ABC):
 
     @property
     def weapon(self):
+        # Returns self.__weapon
         return self.__weapon
 
     @weapon.setter
