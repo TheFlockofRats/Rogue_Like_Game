@@ -11,6 +11,8 @@ class Character(ABC):
 
     Attributes
     ----------
+    __init__(self, char_name: str)
+            This is the constructor for a base character without any modifications
     NO_ARMOR:
         Set to the following - Armor('N/A', 0, Condition.GOOD, [0, 0, 0, 0])
     BARE_HANDS:
@@ -40,12 +42,65 @@ class Character(ABC):
 
     Methods
     -------
-    
+    phys_attack_modifier(self) -> int
+        This method will return an integer that totals the physical attack of a character, and modifiers from character's items
+    phys_defense_modifier(self) -> int
+        This method does the same as the phys_attack_modifier, but for physical defense instead
+    magic_attack_modifier(self) -> int
+        This method will return an integer that totals the magical attack of a character, and modifiers from character's items
+    magic_defense_modifier(self) -> int
+        This method like the magic_attack_modifier, does the same, but with magic defense instead.
+    deal_damage(self) -> (int, bool)
+        This method returns the total damage that would be dealt when an attack is successful and a boolean that represents if a critical strike was made
+    take_damage(self, damage) -> None
+        This method subtracts the damage from the temporary health of the character.
+    attack(self, target: Character) -> str
+        This method determines whether or not a character can attack a Creature, if so it will determine how much damage
+    equip(self, item: Item, position: str=None) -> None
+        This method passes in an Item that is either Armor or a Weapon and a position on the body to place the Item.
+    pick_up(self, item: Item) -> str
+        Puts an item into the Character's __inventory and returns a string to indicate it was picked up
+    drop(self, item: Item) -> (str, Item)
+        Removes an item from a Character's __inventory and returns it with a string to indicate that it was dropped.
 
-
-
+    Exception's
+    -------
+    CharacterDeathException
+        Allows a character that has or is going to below zero to have its slain message string set and its temp health set to zero
     """
     def __init__(self, char_name: str):
+        """
+        Parameters
+        ----------
+        __init__(self, char_name: str)
+            This is the constructor for a base character without any modifications
+        NO_ARMOR:
+            Set to the following - Armor('N/A', 0, Condition.GOOD, [0, 0, 0, 0])
+        BARE_HANDS:
+            Set to the following - Weapon('Bare hands, 0, Condition.GOOD, [0, 0, 0, 0], AttackType.PHYSICAL, 2)
+        Self.__name: str
+            The character's name, must be a non-empty string
+        self.__health: List[int]
+            The character's temporary health and maximum health are stored here, this is a 2 element list and must be ints
+        self.__mana: List[int]
+            The character's temporary mana and maximum mana are stored here as a list of integers.
+        self.__physical_stats: List[int]
+            The character's physical attack modifier and physical defense modifier are stored as a list of integers
+        self.__magical_stats: List[int]
+            tThe character's magical attack modifier and magical defense modifier stored as a list of integers
+        self.__luck: int
+            An integer that act's as a modifier used to determine the success of a critical strike.
+        self.__critical_percentage: int
+            This is the character's percentage chance to land a critical strike.
+        self.___critical_modifier: float
+            This is the character's damage multiplier when a critical strike is landed.
+        self.__inventory: List[Item]
+            This is the character's inventory where unequipped items are stored.
+        self.__equipment: Dict[str, Armor]
+            This is a dictionary representing a character's equipped items.
+        self.__weapon: Weapon
+            This is the character's equipped weapon
+        """
         NO_ARMOR = Armor('N/A', 0, Condition.GOOD, [0, 0, 0, 0])
         BARE_HANDS = Weapon('Bare hands', 0, Condition.GOOD, [0, 0, 0, 0], AttackType.PHYSICAL, 2)
         self.__name = char_name
