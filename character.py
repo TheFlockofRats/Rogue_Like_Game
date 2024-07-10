@@ -444,7 +444,7 @@ class Warrior(Character):
         self.__magical_stats[1] -= rand_num_magical
 
     def karate_kick(self, target: Creature):
-        # One of the three aditions that we added, check to ensure that the target has enough mana then preforms the damage
+        # One of the three additions that we added, check to ensure that the target has enough mana then preforms the damage
         if self.__mana[0] >= 2:
             target.health[0] -= 3
             self.__mana[0] -= 2
