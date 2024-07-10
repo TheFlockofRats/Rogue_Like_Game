@@ -114,6 +114,8 @@ class Character(ABC):
         self.__inventory = []
         self.__equipment = {'HEAD': NO_ARMOR, 'BODY': NO_ARMOR, 'HANDS': NO_ARMOR, 'LEGS': NO_ARMOR, 'FEET': NO_ARMOR}
         self.__weapon = BARE_HANDS
+        self.damage = 0
+        self.critical_strike_bool = None
 
     @property
     def name(self):
@@ -231,6 +233,22 @@ class Character(ABC):
         # Sets  self.__weapon to new_weapon
         self.__weapon = new_weapon
 
+    @property
+    def damage(self):
+        return self.damage
+
+    @damage.setter
+    def damage(self, new_damage):
+        self.damage = new_damage
+
+    @property
+    def critical_strike_bool(self):
+        return self.critical_strike_bool
+
+    @critical_strike_bool.setter
+    def critical_strike_bool(self, new_critical_strike_bool):
+        self.critical_strike_bool = new_critical_strike_bool
+
     def phys_attack_modifier(self) -> int:
         """
         Calculates the total physical attack modifier including armor and weapon modifiers.
@@ -294,16 +312,16 @@ class Character(ABC):
     def deal_damage(self) -> (int, bool):
         # This method returns the total damage given if an attack is successful and a boolean for if a critical strike was made
         d = Weapon.damage
-        damage = random.randint(1, int(d))
+        self.damage = random.randint(1, int(d))
         rand_num = random.randint(1, 100)
         # Check to ensure that the rand_num is less than the self.__critical_percentage added to self.__luck
         if rand_num <= (self.__critical_percentage + self.__luck):
-            damage = floor(damage * self.__critical_modifier)
-            critical_strike_bool = True
+            self.damage = floor(self.damage * self.__critical_modifier)
+            self.critical_strike_bool = True
         else:
-            critical_strike_bool = False
+            self.critical_strike_bool = False
         # returns damage, and the bool for if there was a critical strike
-        return damage, critical_strike_bool
+        return self.damage, self.critical_strike_bool
 
     def take_damage(self, damage) -> None:
         #  This method subtracts damage input from the temporary health of the character
@@ -312,7 +330,7 @@ class Character(ABC):
         if temp_health < 1:
             raise CharacterDeathException
 
-    def attack(self, target: Character, damage, critical_strike_bool) -> str:
+    def attack(self, target: Character) -> str:
         # This method determines if a character can attack a Creature. If it can, the character's damage is determined and dealt.
         attacker = random.randint(1, 20)
         defender = random.randint(1, 20)
@@ -332,22 +350,22 @@ class Character(ABC):
             defender += Armor.magical_attack
             defender += Armor.magical_defense
 
-        if critical_strike_bool is True:
+        if self.critical_strike is True:
             # check to see if critical_strike_bool is True
             if attacker >= defender:
                 # Check to see if the attackers attack damage is greater than the defenders defense
                 target.deal_damage()
                 if target.health[0] <= 0:
                     # Check to see if target's dammage
-                    return f'{target} lost {damage} health and died with a critical hit from {self.__name}!'
+                    return f'{target} lost {self.damage} health and died with a critical hit from {self.__name}!'
                 else:
-                    return f'{target} lost {damage} health with a critical hit from {self.__name}!'
+                    return f'{target} lost {self.damage} health with a critical hit from {self.__name}!'
 
         else:
             if target.health[0] <= 0:
-                return f'{target} lost {damage} health and died from {self.__name}!'
+                return f'{target} lost {self.damage} health and died from {self.__name}!'
             else:
-                return f'{target} lost {damage} health from {self.__name}!'
+                return f'{target} lost {self.damage} health from {self.__name}!'
 
     def equip(self, item: Item, position: str = None) -> None:
         """
@@ -425,7 +443,7 @@ class Warrior(Character):
     The Warrior class is meant to create a fighter that specializes in physical combat.
     They will have a greater amount of health, a greater physical defense, but little magical defense.
     """
-    def __init__(self, char_name: str):
+    def __init__(self, char_name: str, name):
         super().__init__(char_name)
 
         # Warrior Health Stats:
@@ -510,8 +528,8 @@ class Mage(Character):
 
 
 class priest(Character):
-    def __init__(self, char_name):
-        super().__init__(char_name)
+    def __init__(self, char_name, health):
+        super().__init__(char_name, health)
 
     def heal(self, target) -> str:
         rand_heal = random.randint(1, 8)

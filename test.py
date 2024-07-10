@@ -5,7 +5,6 @@ import math
 from item import Condition, AttackType, Item, Loot, Armor, Weapon
 from character import *
 
-
 class TestItem(unittest.TestCase):
     def test_item_initial(self):
         item = Loot("Test Item", 50, Condition.GOOD)
@@ -45,10 +44,20 @@ class TestItem(unittest.TestCase):
         with self.assertRaises(ValueError):
             Weapon("Test Weapon", 150, Condition.ACCEPTABLE, [15, 25, 10, 20], AttackType.PHYSICAL, -30)
 
+
+class TestCharacter(unittest.TestCase):
+    def test_name_int(self):
+        with self.assertRaises(TypeError):
+            Character(4)
+
+    def test_name_list(self):
+        with self.assertRaises(TypeError):
+            Character([])
+
     def test_WARRIOR(self):
         with self.assertRaises(ValueError):
             Jeff = Warrior('jeff')
             Jeff.name = ''
-    
+
 if __name__ == "__main__":
     unittest.main()
