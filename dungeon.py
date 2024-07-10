@@ -1,7 +1,9 @@
 from typing import List
+from character import Character
 """
-fix still Self.__prior should be self.__previous
+
 """
+
 
 class Item:
     pass
@@ -72,14 +74,14 @@ class Dungeon:
             raise TypeError
         # Check to ensure that Self.__creatures length is not more than 4, else raise ValueError
         if not len(self.__creatures) > 5:
-            self.__creatures: List[Creature] = []
+            self.__creatures = []
         else:
             raise ValueError("Too many creatures in this dungeon")
 
         self.__name = name
         self.__description = description
         self.__items: List[Item] = []
-        self.__prior: Dungeon = None
+        self.__previous: Dungeon = None
         self.__next: Dungeon = None
 
     @property
@@ -109,23 +111,28 @@ class Dungeon:
         self.__description = value
 
     @property
-    def creatures(self) -> List[Creature]:
-        # Check to ensure that Self.__creatures length is not more than 4, else raise ValueError
-        if not len(self.__creatures) < 5:
+    def creatures(self) -> list[Creature]:
             # Returns self.__creatures
             return self.__creatures
+
+
+    @creatures.setter
+    def creatures(self, new_creatures):
+        # Check to ensure that Self.__creatures length is not more than 4, else raise ValueError
+        if len(self.__creatures) < 5:
+            self.__creatures = new_creatures
         else:
             raise ValueError
 
     @property
-    def items(self) -> List[Creature]:
+    def items(self) -> list[Creature]:
         # Returns self.__items
         return self.__items
 
     @items.setter
     def items(self, new_items):
         # Check to ensure that self.__items is not more than 4
-        if self.__items < 4:
+        if len(self.__items) < 4:
             # Adding new_item to self.__items
             self.__items.append(new_items)
         else:
@@ -135,6 +142,52 @@ class Dungeon:
     def next(self):
         # Returns self.__next
         return self.__next
+
+    @next.setter
+    def next(self, new_next):
+        self.__next = new_next
+
+    @property
+    def previous(self):
+        return self.__previous
+
+    @previous.setter
+    def previous(self, new_previous):
+        self.__previous = new_previous
+
+    def show_creatures(self) -> str:
+        separated = ', '.join(self.__creatures)
+        return separated
+
+    def check_creature(self, creature_name: str):
+        if creature_name in self.__creatures:
+            return True
+
+        else:
+            return False
+
+    def show_items(self) -> str:
+        pass
+
+    def check_item(self, item_name: str) -> bool:
+        pass
+
+    def pick_up_item(self, item_name: str, target: Character) -> str:
+        pass
+
+    def drop_item(self, item_name: str, target: Character) -> str:
+        pass
+
+    def __str__(self) -> str:
+        pass
+
+
+
+
+
+
+
+
 
     def Loot(self):
         pass

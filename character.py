@@ -281,7 +281,7 @@ class Character(ABC):
 
     def deal_damage(self) -> (int, bool):
         d = Weapon.damage
-        damage = random.randint(1, d)
+        damage = random.randint(1, int(d))
         rand_num = random.randint(1, 100)
         if rand_num <= (self.__critical_percentage + self.__luck):
             damage = floor(damage * self.__critical_modifier)
