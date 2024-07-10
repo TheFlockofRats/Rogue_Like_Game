@@ -195,7 +195,9 @@ class Dungeon:
             target.pick_up(item_name)
 
     def drop_item(self, item_name: str, target: Character) -> str:
-        if item_name in Character.inventory:
+        if item_name not in Character.inventory:
+            return 'No item with that name in your inventory'
+        else:
             target.drop(item_name)
 
     def __str__(self) -> str:
