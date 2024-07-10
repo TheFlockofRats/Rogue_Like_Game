@@ -1,5 +1,8 @@
 from typing import List
+
+import item
 from character import Character
+from item import Armor, Weapon, Loot
 """
 
 """
@@ -167,33 +170,36 @@ class Dungeon:
             return False
 
     def show_items(self) -> str:
-        pass
+        for i in range(len(self.__items)):
+            if i in item.Armor:
+                return f'{self.__items[i]} - Armor'
+
+            if i in item.Weapon:
+                return f'{self.__items[i]} - Weapon'
+
+            if i in item.Loot:
+                return f'{self.__items[i]} - Loot'
 
     def check_item(self, item_name: str) -> bool:
-        pass
+        if item_name in self.__items:
+            return True
+
+        else:
+            return False
 
     def pick_up_item(self, item_name: str, target: Character) -> str:
-        pass
+        if item_name not in self.__items:
+            return 'Item not found!'
+
+        else:
+            target.pick_up(item_name)
 
     def drop_item(self, item_name: str, target: Character) -> str:
-        pass
+        if item_name in Character.inventory:
+            target.drop(item_name)
 
     def __str__(self) -> str:
-        pass
-
-
-
-
-
-
-
-
-
-    def Loot(self):
-        pass
-
-    def Armor(self):
-        pass
-
-    def Weapon(self):
-        pass
+        return (f'Room Name: {self.__name}\nDescription: {self.__description}\n'
+                f'===========================================================================\n'
+                f'Creatures: {self.__creatures}\n'
+                f'--------------------------------------------------------------------------\nItems: {self.__items}')

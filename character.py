@@ -363,6 +363,9 @@ class Character(ABC):
         if not isinstance(item, Weapon) or not isinstance(item, Armor):
             raise CannotEquipException
 
+        if position not in self.__equipment:
+            raise CannotEquipException
+
         # Check to see if item is a weapon if so places that weapon in inventory and sets self.__weapon to the item
         if isinstance(item, Weapon):
             self.__inventory.append(self.__weapon)
