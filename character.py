@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 from math import floor
 
-
 from item import Item, Armor, Weapon, Condition, AttackType
 import random
 
@@ -69,6 +68,7 @@ class Character(ABC):
     CharacterDeathException
         Allows a character that has or is going to below zero to have its slain message string set and its temp health set to zero
     """
+
     def __init__(self, char_name: str):
         """
         Parameters
@@ -116,7 +116,6 @@ class Character(ABC):
         self.__equipment = {'HEAD': NO_ARMOR, 'BODY': NO_ARMOR, 'HANDS': NO_ARMOR, 'LEGS': NO_ARMOR, 'FEET': NO_ARMOR}
         self.__weapon = BARE_HANDS
 
-
     @property
     def name(self):
         # Returns self.__name
@@ -124,7 +123,9 @@ class Character(ABC):
 
     @name.setter
     def name(self, new_name):
+        # Check to see if new_name is not empty, and that new_name is of type str
         if new_name != '' and isinstance(new_name, str):
+            # Sets self.__name to new_name
             self.__name = new_name
 
     @property
@@ -134,7 +135,9 @@ class Character(ABC):
 
     @health.setter
     def health(self, new_health):
+        # Check if length of New_health equals 2 and that each value of new_health is of int type
         if len(new_health) == 2 and new_health[0] == int and new_health[1] == int:
+            # Sets self.__health to new_health
             self.__health = new_health
 
     @property
@@ -144,7 +147,9 @@ class Character(ABC):
 
     @mana.setter
     def mana(self, new_mana):
+        # Check if the first and second items in new_mana are of type int
         if new_mana[0] == int and new_mana[1] == int:
+            # Sets self.__mana to new_mana
             self.__mana = new_mana
 
     @property
@@ -154,6 +159,7 @@ class Character(ABC):
 
     @physical_stats.setter
     def physical_stats(self, new_physical_stats):
+        # Sets self.__physical_stats to new_physical_stats
         self.__physical_stats = new_physical_stats
 
     @property
@@ -163,6 +169,7 @@ class Character(ABC):
 
     @magical_stats.setter
     def magical_stats(self, new_magical_stats):
+        # Sets self.__magical_stats to new_magical_stats
         self.__magical_stats = new_magical_stats
 
     @property
@@ -172,6 +179,7 @@ class Character(ABC):
 
     @luck.setter
     def luck(self, new_luck):
+        # Sets  self.__luck to new_luck
         self.__luck = new_luck
 
     @property
@@ -181,6 +189,7 @@ class Character(ABC):
 
     @critical_percentage.setter
     def critical_percentage(self, new_critical_percentage):
+        # Sets  self.__critical_percentage to new_critical_percentage
         self.__critical_percentage = new_critical_percentage
 
     @property
@@ -190,6 +199,7 @@ class Character(ABC):
 
     @critical_modifier.setter
     def critical_modifier(self, new_critical_modifier):
+        # Sets  self.__critical_modifier to new_critical_modifier
         self.__critical_modifier = new_critical_modifier
 
     @property
@@ -199,6 +209,7 @@ class Character(ABC):
 
     @inventory.setter
     def inventory(self, new_inventory):
+        # Sets  self.__inventory to new_inventory
         self.__inventory = new_inventory
 
     @property
@@ -208,6 +219,7 @@ class Character(ABC):
 
     @equipment.setter
     def equipment(self, new_equipment):
+        # Sets  self.__equipment to new_equipment
         self.__equipment = new_equipment
 
     @property
@@ -217,6 +229,7 @@ class Character(ABC):
 
     @weapon.setter
     def weapon(self, new_weapon):
+        # Sets  self.__weapon to new_weapon
         self.__weapon = new_weapon
 
     def phys_attack_modifier(self) -> int:
@@ -227,10 +240,10 @@ class Character(ABC):
             int: The total physical attack modifier.
         """
         total_modifier = self.__physical_stats[0]
-        
+
         for part in self.__equipment.values():
             total_modifier += part.physical_attack
-        
+
         total_modifier += self.__weapon.physical_attack
         return total_modifier
 
@@ -242,10 +255,10 @@ class Character(ABC):
             int: The total physical defense modifier.
         """
         total_modifier = self.__physical_stats[1]
-        
+
         for part in self.__equipment.values():
             total_modifier += part.physical_defense
-        
+
         total_modifier += self.__weapon.physical_defense
         return total_modifier
 
@@ -257,10 +270,10 @@ class Character(ABC):
             int: The total magic attack modifier.
         """
         total_modifier = self.__magical_stats[0]
-        
+
         for part in self.__equipment.values():
             total_modifier += part.magical_attack
-        
+
         total_modifier += self.__weapon.magical_attack
         return total_modifier
 
@@ -272,26 +285,25 @@ class Character(ABC):
             int: The total magic defense modifier.
         """
         total_modifier = self.__magical_stats[1]
-        
+
         for part in self.__equipment.values():
             total_modifier += part.magical_defense
-        
+
         total_modifier += self.__weapon.magical_defense
         return total_modifier
 
     def deal_damage(self) -> (int, bool):
+        # This method returns the total damage given if an attack is successful and a boolean for if a critical strike was made
         d = Weapon.damage
         damage = random.randint(1, d)
         rand_num = random.randint(1, 100)
         if rand_num <= (self.__critical_percentage + self.__luck):
             damage = floor(damage * self.__critical_modifier)
             critical_strike_bool = True
-
         else:
             critical_strike_bool = False
         return damage, critical_strike_bool
 
-#test
     def take_damage(self, damage) -> None:
         temp_health = damage - self.__health[0]
         if temp_health < 1:
@@ -380,7 +392,7 @@ class Creature(Character):
         x = random.randint(20, 40)
         self.health = [x, x]
         self.equip(Weapon(random.choice(Weapon.WEAPONS), condition=Condition.GOOD, value=0,
-                          stats=[random.randint(1,5) for _ in range(4)],
+                          stats=[random.randint(1, 5) for _ in range(4)],
                           attack_type=(random.choice(list(AttackType))), damage=random.randint(2, 12)))
         self.__gold = random.randint(0, 25)
 
@@ -418,18 +430,19 @@ class Rouge(Character):
         self.__luck += 10
         self.__critical_percentage = 10
         self.__critical_modifier = 2.5
-        self.__health = [20,20]
-        rand_num_physical = random.randint(1,3)
+        self.__health = [20, 20]
+        rand_num_physical = random.randint(1, 3)
         self.__physical_stats[1] -= rand_num_physical
+
 
 class Mage(Character):
     def __init__(self, char_name: str):
         super().__init__(char_name)
 
-        rand_num_magical = random.randint(1,3)
+        rand_num_magical = random.randint(1, 3)
         self.__magical_stats[0] += rand_num_magical
 
-        rand_num_physical = random.randint(0,2)
+        rand_num_physical = random.randint(0, 2)
         self.__physical_stats[0] = 0
         self.__physical_stats[1] = 3 - rand_num_physical
         self.__health = [20, 20]
@@ -446,8 +459,6 @@ class Mage(Character):
             return f'{rand_damage} damage has been dealt to {target}'
         else:
             raise LowMana('Gandalf ran out of mana because he is old and weak')
-
-
 
     def cast_fire_ball(self, target: list[Creature]) -> str:
         rand_damage = random.randint(10, 25)
@@ -466,8 +477,6 @@ class Mage(Character):
             return f'{self.__name} dealt {rand_damage} damage using Thunderbolt'
         else:
             raise LowMana(f'{self.__name} ran out of mana because he is old and weak')
-
-
 
 
 class priest(Character):
@@ -527,15 +536,3 @@ class InvalidTarget(Exception):
 class CannotEquipException(Exception):
     def __init__(self):
         pass
-
-
-
-
-
-
-
-
-
-
-
-
