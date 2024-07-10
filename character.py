@@ -383,7 +383,7 @@ class Character(ABC):
                 self.__equipment[1] = item
 
             elif position == 'HANDS':
-                self.__inventory.append(self.__eq.uipment[2])
+                self.__inventory.append(self.__equipment[2])
                 self.__equipment[2] = item
 
             elif position == 'LEGS':

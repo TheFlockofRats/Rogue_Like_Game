@@ -148,21 +148,26 @@ class Dungeon:
 
     @next.setter
     def next(self, new_next):
+        # Sets self.__next to something new
         self.__next = new_next
 
     @property
     def previous(self):
+        # Returns previous dungeon
         return self.__previous
 
     @previous.setter
     def previous(self, new_previous):
+        # Sets the previous dungeon to something new
         self.__previous = new_previous
 
     def show_creatures(self) -> str:
+        # Shows all the creatures from a given list and separates with a comma using .join()
         separated = ', '.join(self.__creatures)
         return separated
 
     def check_creature(self, creature_name: str):
+        #if the creature in question is in the list of creatures then it returns True else returns False
         if creature_name in self.__creatures:
             return True
 
@@ -170,17 +175,20 @@ class Dungeon:
             return False
 
     def show_items(self) -> str:
+        # Loop runs as many times as there is items in the list.
         for i in range(len(self.__items)):
+            # If the item is armor it returns the item with -Armor after
             if i in item.Armor:
                 return f'{self.__items[i]} - Armor'
-
+            # If the item is weapon it returns the item with -Weapon after
             if i in item.Weapon:
                 return f'{self.__items[i]} - Weapon'
-
+            # If the item is Loot it returns the item with -Loot after
             if i in item.Loot:
                 return f'{self.__items[i]} - Loot'
 
     def check_item(self, item_name: str) -> bool:
+        # If the item in question is in the list of items in the dungeon it returns True else returns False
         if item_name in self.__items:
             return True
 
@@ -188,6 +196,8 @@ class Dungeon:
             return False
 
     def pick_up_item(self, item_name: str, target: Character) -> str:
+        # If the item in question is not in the items within dungeon it returns with Item not found, else it picks up
+        # the item and appends it to the targets inventory
         if item_name not in self.__items:
             return 'Item not found!'
 
@@ -195,12 +205,15 @@ class Dungeon:
             target.pick_up(item_name)
 
     def drop_item(self, item_name: str, target: Character) -> str:
-        if item_name not in Character.inventory:
+        # If the item in question is not in the targets inventory it returns with No item with that name in your
+        # inventory, else it drops the item from the target's inventory
+        if item_name not in target.inventory:
             return 'No item with that name in your inventory'
         else:
             target.drop(item_name)
 
     def __str__(self) -> str:
+        # Returns the room name, description of the room, the creatures in the room, and the items in the room
         return (f'Room Name: {self.__name}\nDescription: {self.__description}\n'
                 f'===========================================================================\n'
                 f'Creatures: {self.__creatures}\n'
