@@ -3,7 +3,7 @@ from enum import Enum
 from typing import List
 import math
 from item import Condition, AttackType, Item, Loot, Armor, Weapon
-from character import Character
+from character import *
 
 class TestItem(unittest.TestCase):
     def test_item_initial(self):
@@ -53,5 +53,11 @@ class TestCharacter(unittest.TestCase):
     def test_name_list(self):
         with self.assertRaises(TypeError):
             Character([])
+
+    def test_WARRIOR(self):
+        with self.assertRaises(ValueError):
+            Jeff = Warrior('jeff')
+            Jeff.name = ''
+
 if __name__ == "__main__":
     unittest.main()
