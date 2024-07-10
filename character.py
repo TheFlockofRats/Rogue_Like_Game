@@ -220,16 +220,64 @@ class Character(ABC):
         self.__weapon = new_weapon
 
     def phys_attack_modifier(self) -> int:
-        pass
+        """
+        Calculates the total physical attack modifier including armor and weapon modifiers.
+        
+        Returns:
+            int: The total physical attack modifier.
+        """
+        total_modifier = self.__physical_stats[0]
+        
+        for part in self.__equipment.values():
+            total_modifier += part.physical_attack
+        
+        total_modifier += self.__weapon.physical_attack
+        return total_modifier
 
     def phys_defense_modifier(self) -> int:
-        pass
+        """
+        Calculates the total physical defense modifier including armor and weapon modifiers.
+        
+        Returns:
+            int: The total physical defense modifier.
+        """
+        total_modifier = self.__physical_stats[1]
+        
+        for part in self.__equipment.values():
+            total_modifier += part.physical_defense
+        
+        total_modifier += self.__weapon.physical_defense
+        return total_modifier
 
     def magic_attack_modifier(self) -> int:
-        pass
+        """
+        Calculates the total magic attack modifier including armor and weapon modifiers.
+        
+        Returns:
+            int: The total magic attack modifier.
+        """
+        total_modifier = self.__magical_stats[0]
+        
+        for part in self.__equipment.values():
+            total_modifier += part.magical_attack
+        
+        total_modifier += self.__weapon.magical_attack
+        return total_modifier
 
     def magic_defense_modifier(self) -> int:
-        pass
+        """
+        Calculates the total magic defense modifier including armor and weapon modifiers.
+        
+        Returns:
+            int: The total magic defense modifier.
+        """
+        total_modifier = self.__magical_stats[1]
+        
+        for part in self.__equipment.values():
+            total_modifier += part.magical_defense
+        
+        total_modifier += self.__weapon.magical_defense
+        return total_modifier
 
     def deal_damage(self) -> (int, bool):
         d = Weapon.damage
@@ -300,7 +348,7 @@ class Character(ABC):
                 self.__equipment[1] = item
 
             elif position == 'HANDS':
-                self.__inventory.append(self.__equipment[2])
+                self.__inventory.append(self.__eq.uipment[2])
                 self.__equipment[2] = item
 
             elif position == 'LEGS':

@@ -1,11 +1,12 @@
-from abc import ABC, abstractmethod
 from enum import Enum
+from abc import ABC, abstractmethod
 from typing import List
 import math
 
+
 class Condition(Enum):
     """
-    Enum for item condition.
+    The condition of an item.
     """
     EXCELLENT = 1
     GOOD = 2
@@ -16,7 +17,7 @@ class Condition(Enum):
 
 class AttackType(Enum):
     """
-    Enum for attack types.
+    The type of attack an item can perform.
     """
     PHYSICAL = 1
     MAGICAL = 2
@@ -24,124 +25,161 @@ class AttackType(Enum):
 
 class Item(ABC):
     """
-    Abstract base class for an item.
+    Abstract base class of an item.
+
+    Attributes:
+        name (str): Name of the item.
+        value (int): Value of the item in gold.
+        condition (Condition): Condition state of the item.
     """
+
     def __init__(self, name: str, value: int, condition: Condition):
         """
         Initialize an Item.
 
         Args:
-            name (str): The name of the item.
-            value (int): The value of the item.
-            condition (Condition): The condition of the item.
+            name (str): Name of the item.
+            value (int): Value of the item in gold.
+            condition (Condition): Condition state of the item.
         """
-        if not isinstance(name, str) or len(name) < 1:
-            raise ValueError
-        if not isinstance(value, int) or value < 0:
-            raise ValueError
-        if not isinstance(condition, Condition):
-            raise TypeError
-        
-        self.__name = name
-        self.__value = value
-        self.__condition = condition
+        self.name = name
+        self.value = value
+        self.condition = condition
 
     @property
-    def name(self):
+    def name(self) -> str:
         """
-        Get the name of the item.
+        str: Name of item.
         """
         return self.__name
-    
+
     @name.setter
-    def name(self, value):
+    def name(self, name: str):
         """
-        Set the name of the item.
+        Setter for the name attribute.
+
+        Args:
+            name (str): Name of the item.
+
+        Raises:
+            TypeError: If name is not a string.
+            ValueError: If name has length less than 1.
         """
-        if not isinstance(value, str) or len(value) < 1:
+        if not isinstance(name, str):
+            raise TypeError
+        if len(name) < 1:
             raise ValueError
-        self.__name = value
-    
+        self.__name = name
+
     @property
-    def value(self):
+    def value(self) -> int:
         """
-        Get the value of the item.
+        int: Value of the item in gold.
         """
         return self.__value
-    
+
     @value.setter
-    def value(self, value):
+    def value(self, value: int):
         """
-        Set the value of the item.
+        Setter for the value attribute.
+
+        Args:
+            value (int): Value of the item in gold.
+
+        Raises:
+            TypeError: If value is not an integer.
+            ValueError: If value is less than 0.
         """
-        if not isinstance(value, int) or value < 0:
+        if not isinstance(value, int):
+            raise TypeError
+        if value < 0:
             raise ValueError
         self.__value = value
-    
+
     @property
-    def condition(self):
+    def condition(self) -> Condition:
         """
-        Get the condition of the item.
+        Condition: Condition state of the item.
         """
         return self.__condition
-    
-    @condition.setter
-    def condition(self, value):
-        """
-        Set the condition of the item.
-        """
-        if not isinstance(value, Condition):
-            raise TypeError
-        self.__condition = value
 
-    def __str__(self):
+    @condition.setter
+    def condition(self, condition: Condition):
         """
-        Return a string description of the item.
+        Setter for the condition attribute.
+
+        Args:
+            condition (Condition): Condition state of the item.
+
+        Raises:
+            TypeError: If condition is not a Condition enum.
         """
-        return f"Item: {self.name}, Value: {self.value}, Condition: {self.condition.name}"
-    
+        if not isinstance(condition, Condition):
+            raise TypeError
+        self.__condition = condition
+
     @abstractmethod
     def item_info(self) -> str:
         """
-        Abstract method for item information.
+        Abstract method to get basic information about the item.
+
+        Returns:
+            str: Basic information about the item.
         """
-        pass 
+        pass
 
     @abstractmethod
-    def set_stats(self, stats: List[int]):
+    def set_stats(self, stats: list[int]):
         """
-        Abstract method to set item stats.
+        Abstract method to set the stats of the item based on list of integers.
+
+        Args:
+            stats (List[int]): List of integers representing stats.
+
+        Raises:
+            TypeError: If stats is not a list.
+            ValueError: If stats list does not have the correct length or doesn't have an integer.
         """
         pass
 
     @abstractmethod
     def adjust_stats(self):
         """
-        Abstract method to adjust item stats.
+        Abstract method to adjust the stats of the item based on its condition.
         """
         pass
 
 
 class Loot(Item):
     """
-    Class representing loot items.
+    Class representing loot, inheriting from Item.
     """
-    def item_info(self):
+
+    def item_info(self) -> str:
         """
-        Provides information about the loot item.
+        Get basic information about the loot item.
+
+        Returns:
+            str: Basic information about the loot item.
         """
-        return super().__str__()
+        return f"Item: {self.name}, Value: {self.value} gold, Condition: {self.condition.name}"
 
     def set_stats(self, stats: int):
         """
-        Set stats for the loot item.
+        Set the stats of the loot item based on a single integer stat.
 
         Args:
-            stats (int): The base value for the loot item.
+            stats (int): Integer representing the stats of the loot item.
+
+        Raises:
+            TypeError: If stats is not an integer.
+            ValueError: If stats is less than 0.
         """
         if not isinstance(stats, int):
+            raise TypeError
+        if stats < 0:
             raise ValueError
-        
+
         if self.condition == Condition.EXCELLENT:
             self.value = math.floor(stats * 1.25)
         elif self.condition == Condition.GOOD:
@@ -152,81 +190,94 @@ class Loot(Item):
             self.value = math.floor(stats * 0.5)
         elif self.condition == Condition.ABYSMAL:
             self.value = math.floor(stats * 0.1)
-    
+
     def adjust_stats(self):
         """
-        Adjust stats for the loot item.
+        Adjust the stats of the loot item based on its condition.
         """
         pass
 
 
 class Armor(Item):
     """
-    Class representing armor items.
+    Class representing armor, inheriting from Item.
+
+    Attributes:
+        Inherits attributes from Item class.
+        physical_attack (int): Physical attack bonus of the armor.
+        physical_defense (int): Physical defense bonus of the armor.
+        magical_attack (int): Magical attack bonus of the armor.
+        magical_defense (int): Magical defense bonus of the armor.
     """
+
     def __init__(self, name: str, value: int, condition: Condition, stats: List[int]):
         """
-        Initialize an Armor item.
+        Initializes Armor.
 
         Args:
-            name (str): The name of the armor item.
-            value (int): The value of the armor item.
-            condition (Condition): The condition of the armor item.
-            stats (List[int]): List of stat values [physical_attack, physical_defense, magical_attack, magical_defense].
+            name (str): Name of the armor.
+            value (int): Value of the armor in gold.
+            condition (Condition): Condition state of the armor.
+            stats (List[int]): List of integers representing stats of the armor.
         """
         super().__init__(name, value, condition)
-        self.__physical_attack_modifier = 0
-        self.__physical_defense_modifier = 0
-        self.__magical_attack_modifier = 0
-        self.__magical_defense_modifier = 0
         self.set_stats(stats)
 
     @property
-    def physical_attack(self):
+    def physical_attack(self) -> int:
         """
-        Get the physical attack modifier of the armor.
+        int: Physical attack bonus of the armor.
         """
         return self.__physical_attack_modifier
 
     @property
-    def physical_defense(self):
+    def physical_defense(self) -> int:
         """
-        Get the physical defense modifier of the armor
+        int: Physical defense bonus of the armor.
         """
         return self.__physical_defense_modifier
 
     @property
-    def magical_attack(self):
+    def magical_attack(self) -> int:
         """
-        Get the magical attack modifier of the armor.
+        int: Magical attack bonus of the armor.
         """
         return self.__magical_attack_modifier
 
     @property
-    def magical_defense(self):
+    def magical_defense(self) -> int:
         """
-        Get the magical defense modifier of the armor.
+        int: Magical defense bonus of the armor.
         """
         return self.__magical_defense_modifier
 
     def set_stats(self, stats: List[int]):
         """
-        Set stats for the armor item.
+        Set the stats of the armor based on a list of integers.
 
         Args:
-            stats (List[int]): List of stat values [physical_attack, physical_defense, magical_attack, magical_defense].
+            stats (List[int]): List of integers representing stats of the armor.
+
+        Raises:
+            TypeError: If stats is not a list of integers.
+            ValueError: If stats list does not have the correct length or doesn't have integers.
         """
-        if not isinstance(stats, list) or len(stats) != 4:
+        if not isinstance(stats, list):
+            raise TypeError
+        if len(stats) != 4:
             raise ValueError
-        for i in stats:
-            if not isinstance(i, int):
+        for stat in stats:
+            if not isinstance(stat, int):
                 raise ValueError
-            
-        self.__physical_attack_modifier, self.__physical_defense_modifier, self.__magical_attack_modifier, self.__magical_defense_modifier = stats
+
+        self.__physical_attack_modifier = stats[0]
+        self.__physical_defense_modifier = stats[1]
+        self.__magical_attack_modifier = stats[2]
+        self.__magical_defense_modifier = stats[3]
 
     def adjust_stats(self):
         """
-        Adjust stats for the armor item based on its condition.
+        Adjust the stats of the armor based on its condition.
         """
         if self.condition == Condition.EXCELLENT:
             modifier = 1.25
@@ -238,111 +289,204 @@ class Armor(Item):
             modifier = 0.5
         elif self.condition == Condition.ABYSMAL:
             modifier = 0.25
-    
+        else:
+            modifier = 1.0
+
         self.__physical_attack_modifier = math.floor(self.__physical_attack_modifier * modifier)
         self.__physical_defense_modifier = math.floor(self.__physical_defense_modifier * modifier)
         self.__magical_attack_modifier = math.floor(self.__magical_attack_modifier * modifier)
         self.__magical_defense_modifier = math.floor(self.__magical_defense_modifier * modifier)
 
-    def item_info(self):
+    def item_info(self) -> str:
         """
-        Provide detailed information about the armor item.
-        """
-        return (f"Item: {self.name}, Value: {self.value}, Condition: {self.condition.name}, "
-                f"Physical Attack: {self.physical_attack}, Physical Defense: {self.physical_defense}, "
-                f"Magical Attack: {self.magical_attack}, Magical Defense: {self.magical_defense}")    
-    
+        Get basic information about the armor.
 
-class Weapon(Armor):
-    """
-    Class representing weapon items.
-    """
-    def __init__(self, name: str, value: int, condition: Condition, stats: List[int], attack_type: AttackType, damage: int):
+        Returns:
+            str: Basic information about the armor, including its bonuses.
         """
-        Initialize a Weapon item.
+        return (
+            f"Item: {self.name}, Value: {self.value} gold, Condition: {self.condition.name}\n"
+            f"Physical Attack Modifier: {self.physical_attack}\n"
+            f"Physical Defense Modifier: {self.physical_defense}\n"
+            f"Magical Attack Modifier: {self.magical_attack}\n"
+            f"Magical Defense Modifier: {self.magical_defense}"
+        )
+
+
+class Weapon(Item):
+    """
+    Class representing a weapon, inheriting from Item.
+
+    Attributes:
+        Inherits attributes from Item class.
+        attack_type (AttackType): Type of attack the weapon uses.
+        damage (int): Damage range of the weapon.
+    """
+
+    def __init__(self, name: str, value: int, condition: Condition, stats: List[int], attack_type: AttackType,
+                 damage: int):
+        """
+        Initializes a Weapon.
 
         Args:
-            name (str): The name of the weapon item.
-            value (int): The value of the weapon item.
-            condition (Condition): The condition of the weapon item.
-            stats (List[int]): List of stat values [physical_attack, physical_defense, magical_attack, magical_defense].
-            attack_type (AttackType): The type of attack the weapon uses.
-            damage (int): The damage value of the weapon.
+            name (str): Name of the weapon.
+            value (int): Value of the weapon in gold.
+            condition (Condition): Condition state of the weapon.
+            stats (List[int]): List of integers representing stats of the weapon.
+            attack_type (AttackType): Type of attack the weapon uses.
+            damage (int): Damage range of the weapon.
         """
-        super().__init__(name, value, condition, stats)
-        if not isinstance(attack_type, AttackType):
-            raise TypeError
-        if not isinstance(damage, int) or damage < 0:
-            raise ValueError
+        super().__init__(name, value, condition)
         self.__attack_type = attack_type
+        if not isinstance(damage, int):
+            raise TypeError
+        if damage < 0:
+            raise ValueError
         self.__damage = damage
+        self.set_stats(stats)
 
     @property
-    def attack_type(self):
+    def attack_type(self) -> AttackType:
         """
-        Get the attack type of the weapon.
+        AttackType: Type of attack the weapon uses.
         """
         return self.__attack_type
-    
+
     @attack_type.setter
-    def attack_type(self, attack_type: AttackType):
+    def attack_type(self, value: AttackType):
         """
-        Set the attack type of the weapon.
-        """
-        if not isinstance(attack_type, AttackType):
-            raise TypeError
-        self.__attack_type = attack_type
-    
-    @property
-    def damage(self):
-        """
-        Get the damage of the weapon.
-        """
-        return self.__damage
-    
-    @damage.setter
-    def damage(self, damage: int):
-        """
-        Set the damage of the weapon.
-        """
-        if not isinstance(damage, int):
-            raise ValueError
-        self.__damage = damage
-    
-    def set_stats(self, stats: List[int]):
-        """
-        Set stats for the weapon item.
+        Setter for the attack_type attribute.
 
         Args:
-            stats (List[int]): List of stat values [physical_attack, physical_defense, magical_attack, magical_defense, damage].
+            value (AttackType): Type of attack the weapon uses.
+
+        Raises:
+            TypeError: If value is not an AttackType enum.
         """
+        if not isinstance(value, AttackType):
+            raise TypeError
+        self.__attack_type = value
+
+    @property
+    def damage(self) -> int:
+        """
+        int: Damage range of the weapon.
+        """
+        return self.__damage
+
+    @damage.setter
+    def damage(self, value: int):
+        """
+        Setter for the damage attribute.
+
+        Args:
+            value (int): Damage range of the weapon.
+
+        Raises:
+            TypeError: If value is not an integer.
+            ValueError: If value is less than 0.
+        """
+        if not isinstance(value, int):
+            raise TypeError
+        if value < 0:
+            raise ValueError
+        self.__damage = value
+
+    def set_stats(self, stats: List[int]):
+        """
+        Set the stats of the weapon based on list of integers.
+
+        Args:
+            stats (List[int]): List of integers representing stats of the weapon.
+
+        Raises:
+            TypeError: If stats is not a list of integers.
+            ValueError: If stats list does not have the correct length or doesn't have integers.
+        """
+        if not isinstance(stats, list):
+            raise TypeError
         if len(stats) != 4:
             raise ValueError
-        for i in stats:
-            if not isinstance(i, int):
+        for stat in stats:
+            if not isinstance(stat, int):
                 raise ValueError
-        super().set_stats(stats[:-1])
-        self.__damage = stats[-1]
+
+        self.__physical_attack_modifier = stats[0]
+        self.__physical_defense_modifier = stats[1]
+        self.__magical_attack_modifier = stats[2]
+        self.__magical_defense_modifier = stats[3]
+
+    def adjust_stats(self):
+        """
+        Adjust the stats of the weapon based on its condition.
+        """
+        condition_modifiers = {
+            Condition.EXCELLENT: 1.25,
+            Condition.GOOD: 1.0,
+            Condition.ACCEPTABLE: 0.8,
+            Condition.BAD: 0.5,
+            Condition.ABYSMAL: 0.25
+        }
+
+        modifier = condition_modifiers[self.condition]
+
+        self.__physical_attack_modifier = math.floor(self.__physical_attack_modifier * modifier)
+        self.__physical_defense_modifier = math.floor(self.__physical_defense_modifier * modifier)
+        self.__magical_attack_modifier = math.floor(self.__magical_attack_modifier * modifier)
+        self.__magical_defense_modifier = math.floor(self.__magical_defense_modifier * modifier)
+        self.__damage = math.floor(self.__damage * modifier)
+
+    @property
+    def physical_attack(self) -> int:
+        """
+        int: Physical attack bonus of the weapon.
+        """
+        return self.__physical_attack_modifier
+
+    @property
+    def physical_defense(self) -> int:
+        """
+        int: Physical defense bonus of the weapon.
+        """
+        return self.__physical_defense_modifier
+
+    @property
+    def magical_attack(self) -> int:
+        """
+        int: Magical attack bonus of the weapon.
+        """
+        return self.__magical_attack_modifier
+
+    @property
+    def magical_defense(self) -> int:
+        """
+        int: Magical defense bonus of the weapon.
+        """
+        return self.__magical_defense_modifier
+
+    def item_info(self) -> str:
+        """
+        Get basic information about the weapon.
+
+        Returns:
+            str: Basic information about the weapon, including its bonuses, attack type, and damage range.
+        """
+        return (
+            f"Item: {self.name}, Value: {self.value} gold, Condition: {self.condition.name}\n"
+            f"Physical Attack Modifier: {self.physical_attack}\n"
+            f"Physical Defense Modifier: {self.physical_defense}\n"
+            f"Magical Attack Modifier: {self.magical_attack}\n"
+            f"Magical Defense Modifier: {self.magical_defense}\n"
+            f"Attack Type: {self.attack_type.name}\n"
+            f"Damage: {self.damage}"
+        )
 
 
 if __name__ == "__main__":
-    # Create a Loot item
-    loot_item = Loot("Ancient Coin", 100, Condition.EXCELLENT)
-    print(loot_item.item_info())  # Output: Item: Ancient Coin, Value: 100, Condition: EXCELLENT
-
-    # Modify the stats of the Loot item based on its condition
-    loot_item.set_stats(100)
-    print(loot_item.item_info())  # Output: Item: Ancient Coin, Value: 125, Condition: EXCELLENT
-
-    # Create an Armor item
-    armor_item = Armor("Knight's Armor", 500, Condition.GOOD, [10, 20, 5, 15])
-    print(armor_item.item_info())  # Output: Item: Knight's Armor, Value: 500, Condition: GOOD, Physical Attack: 10, Physical Defense: 20, Magical Attack: 5, Magical Defense: 15
-
-    # Adjust the stats of the Armor item based on its condition
-    armor_item.adjust_stats()
-    print(armor_item.item_info())  # Output: Item: Knight's Armor, Value: 500, Condition: GOOD, Physical Attack: 10, Physical Defense: 20, Magical Attack: 5, Magical Defense: 15
-
-    # Change the condition of the Armor item and adjust stats again
-    armor_item.condition = Condition.BAD
-    armor_item.adjust_stats()
-    print(armor_item.item_info())  # Output: Item: Knight's Armor, Value: 500, Condition: BAD, Physical Attack: 5, Physical Defense: 10, Magical Attack: 2, Magical Defense: 7
+    # cool = Loot("Diamond Sword", 200, Condition.GOOD)
+    # print(cool.item_info())
+    weapon_item = Weapon("Fire Sword", 200, Condition.EXCELLENT, [11, 20, 5, 10], AttackType.MAGICAL, 200)
+    print(weapon_item.item_info())
+    print("-----------------------------------------------")
+    weapon_item.adjust_stats()
+    print(weapon_item.item_info())
