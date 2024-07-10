@@ -350,7 +350,7 @@ class Character(ABC):
             defender += Armor.magical_attack
             defender += Armor.magical_defense
 
-        if self.critical_strike is True:
+        if self.critical_strike_bool is True:
             # check to see if critical_strike_bool is True
             if attacker >= defender:
                 # Check to see if the attackers attack damage is greater than the defenders defense
