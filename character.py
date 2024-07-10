@@ -4,9 +4,6 @@ from math import floor
 from item import Item, Armor, Weapon, Condition, AttackType
 import random
 
-'''
-CHARACTER attack(self, target: Character) -> str's if critical_strike_bool is True: the else statement does not make sense as its in the crit True section and will never get hit.
-'''
 class Character(ABC):
     """ A class that creates the character's for the game
     ...
@@ -346,12 +343,11 @@ class Character(ABC):
                 else:
                     return f'{target} lost {damage} health with a critical hit from {self.__name}!'
 
+        else:
+            if target.health[0] <= 0:
+                return f'{target} lost {damage} health and died from {self.__name}!'
             else:
-# Need to fix the else here
-                if target.health[0] <= 0:
-                    return f'{target} lost {damage} health and died from {self.__name}!'
-                else:
-                    return f'{target} lost {damage} health from {self.__name}!'
+                return f'{target} lost {damage} health from {self.__name}!'
 
     def equip(self, item: Item, position: str = None) -> None:
         """
@@ -361,6 +357,9 @@ class Character(ABC):
         """
         # Check if the Item is not Armor or a Weapon or the position is not in __equipment then raises CannotEquipException
         if not isinstance(item, Weapon) or not isinstance(item, Armor):
+            raise CannotEquipException
+
+        if position not in self.__equipment:
             raise CannotEquipException
 
         # Check to see if item is a weapon if so places that weapon in inventory and sets self.__weapon to the item
@@ -380,7 +379,7 @@ class Character(ABC):
                 self.__equipment[1] = item
 
             elif position == 'HANDS':
-                self.__inventory.append(self.__eq.uipment[2])
+                self.__inventory.append(self.__equipment[2])
                 self.__equipment[2] = item
 
             elif position == 'LEGS':
