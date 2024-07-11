@@ -125,6 +125,13 @@ class Character_Test(unittest.TestCase):
             result = self.priest.resurrect(self.mage)
             self.assertEqual(result, 'Morty is not dead')
 
+    def test_manage_perish_affairs(self):
+        with self.subTest("Testing priest resurrect"):
+            self.priest_name = 'Father_Brown'
+            self.Priest = self.priest(self.priest_name)
+            result = self.priest.manage_perish_affairs()
+            self.assertEqual(result, 'Father_Brown feels 20 years younger')
+
 
 if __name__ == "__main__":
     unittest.main()
