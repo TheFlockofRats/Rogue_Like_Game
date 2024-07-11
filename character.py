@@ -518,8 +518,10 @@ class Mage(Character):
         self.__weapon = Weapon('Practice Wand', 0, Condition.GOOD, [0, 0, 0, 0], AttackType.MAGICAL, 2)
 
     def cast_magic_missile(self, target: Creature) -> str:
-        # assigns a random damage
+        # assigns a random damage between 5-10 to rand_damage
         rand_damage = random.randint(5, 10)
+        # If you have 5 or more mana then the attack takes the damage away from the targets temp health else it will
+        # raise a lowmana exception
         if self.__mana[0] >= 5:
             target.health[0] -= rand_damage
             self.__mana[0] -= 5
@@ -528,7 +530,10 @@ class Mage(Character):
             raise LowMana('Gandalf ran out of mana because he is old and weak')
 
     def cast_fire_ball(self, target: list[Creature]) -> str:
+        # assigns random damage betweenm 10-25 to rand_damage
         rand_damage = random.randint(10, 25)
+        # if you have 8 or more damage, it deals damage to each target in the list with the for loop or else it
+        # raises a lowmana exception
         if self.__mana[0] >= 8:
             for i in range(len(target)):
                 target[i].health[0] -= rand_damage
@@ -537,7 +542,9 @@ class Mage(Character):
             raise LowMana(f'{self.__name} ran out of mana because he is old and weak')
 
     def Thunderbolt(self, target: Creature):
+        # assigns a random damage between 6 and 8 to rand_damage
         rand_damage = random.randint(6, 8)
+        # if you have 3 or more mana, you take 3 health from the targets temp health or else raise a lowmana exception
         if self.__mana[0] >= 3:
             target.health[0] -= rand_damage
             self.__mana[0] -= 3
@@ -546,12 +553,16 @@ class Mage(Character):
             raise LowMana(f'{self.__name} ran out of mana because he is old and weak')
 
 
-class priest(Character):
-    def __init__(self, char_name, health):
-        super().__init__(char_name, health)
+class Priest(Character):
+    def __init__(self, char_name):
+        super().__init__(char_name)
+    # priest takes in all the base attributes and no changes are made
 
     def heal(self, target) -> str:
+        # assigns a random heal amount between 1-8 to rand_heal
         rand_heal = random.randint(1, 8)
+        # if the health of the targets temp health is above 0 and mana is 4 or above, then you add ran_heal to the
+        # temp health of the target or else it will raise InvalidTarget exception
         if target.health[0] != 0:
             if self.__mana[0] >= 4:
                 target.health[0] += rand_heal
@@ -563,6 +574,8 @@ class priest(Character):
             raise InvalidTarget(f'{target} cannot be healed!')
 
     def resurrect(self, target):
+        # if target is dead then you can bring his temp health back to half of his health else it says not enough mana
+        # or target is not dead
         if target.health[0] == 0:
             if self.__mana[0] >= 10:
                 half_health = floor(target.health[1] / 2)
@@ -575,13 +588,14 @@ class priest(Character):
             return f'{target} is not dead!'
 
     def manage_perish_affairs(self):
+        # if you have 15 mana you raise the temp and max health of yourself by 10 or else it raises lowmana exception
         if self.__mana[0] >= 15:
             self.__health[0] += 10
             self.__health[1] += 10
             self.__mana[0] -= 15
-            return f'Pastor Joe feels 20 years younger'
+            return f'{self.name} feels 20 years younger'
         else:
-            return f'Pastor Joe is out of mana and croaked'
+            raise LowMana(f'{self.name} is out of mana and croaked')
 
 
 class CharacterDeathException(Exception):
