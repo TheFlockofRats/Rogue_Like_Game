@@ -155,6 +155,37 @@ class Loot(Item):
     """
     Class representing loot, inheriting from Item.
     """
+    LOOT = (
+        "Amulet of the Eternal Sun",
+        "Ring of Shadows",
+        "Cloak of the Celestial Winds",
+        "Gloves of the Arcane Master",
+        "Boots of Frostbite Resistance",
+        "Pendant of the Moonlit Path",
+        "Belt of Thundering Giants",
+        "Elixir of Eternal Youth",
+        "Scroll of Ancient Wisdom",
+        "Orb of Void Echoes",
+        "Crystal of Elemental Power",
+        "Tome of Lost Secrets",
+        "Chalice of Life",
+        "Scepter of Timeless Kings",
+        "Mask of the Spirit Walker",
+        "Shard of the Fallen Star",
+        "Phoenix Feather Charm",
+        "Shadow Cloak",
+        "Golden Gauntlets of Valor",
+        "Emerald Eye of the Serpent",
+        "Ruby Heart Pendant",
+        "Diamond Shard",
+        "Sapphire Tear",
+        "Obsidian Skull",
+        "Titanium Key",
+        "Enchanted Mirror",
+        "Mystic Horn",
+        "Crown of Kings",
+        "Ancient Relic",
+        "Dragon Scale")
 
     def item_info(self) -> str:
         """
@@ -210,6 +241,38 @@ class Armor(Item):
         magical_attack (int): Magical attack bonus of the armor.
         magical_defense (int): Magical defense bonus of the armor.
     """
+
+    ARMOR = (
+        "Dragonsteel Plate",
+        "Shadowweave Robes",
+        "Titanium Vanguard",
+        "Celestial Mail",
+        "Dreadnought Helm",
+        "Soulforge Gauntlets",
+        "Ebonsteel Greaves",
+        "Phoenix Guard",
+        "Moonstone Circlet",
+        "Obsidian Aegis",
+        "Silversilk Cloak",
+        "Stormbreaker Helm",
+        "Bloodbound Bracers",
+        "Runic Chainmail",
+        "Aetherial Vestments",
+        "Wyrmscale Armor",
+        "Echoesong Helm",
+        "Venomshroud Mantle",
+        "Frostforged Plate",
+        "Thunderheart Robe",
+        "Shadowmend Leggings",
+        "Infernal Warplate",
+        "Emberfury Boots",
+        "Starlight Veil",
+        "Nightmare Cloak",
+        "Spectral Greaves",
+        "Frostfire Crown",
+        "Mystic Defender",
+        "Voidwalkers",
+        "Doomguard Pauldrons")
 
     def __init__(self, name: str, value: int, condition: Condition, stats: List[int]):
         """

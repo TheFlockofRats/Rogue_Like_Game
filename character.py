@@ -434,6 +434,67 @@ class Character(ABC):
 
 
 class Creature(Character):
+    CREATURES = (
+        "Grimclaw",
+        "Shadowfang",
+        "Doombringer",
+        "Bloodthirster",
+        "Frostbite",
+        "Voidspawn",
+        "Soulstealer",
+        "Blazefury",
+        "Darkwhisper",
+        "Venomspine",
+        "Bonecrusher",
+        "Deathshade",
+        "Hexfire",
+        "Nightmare",
+        "Dreadfang",
+        "Cursed One",
+        "Twilight Terror",
+        "Abyssal Horror",
+        "Chaosfiend",
+        "Eldritch Abomination",
+        "Terrorfiend",
+        "Gravecaller",
+        "Doomhowler",
+        "Wraithlord",
+        "Fellbeast",
+        "Skullcrusher",
+        "Bloodseeker",
+        "Rageclaw",
+        "Spectral Wraith",
+        "Blighthound",
+        "Darkspine",
+        "Netherfiend",
+        "Dreadclaw",
+        "Nightstalker",
+        "Gorefiend",
+        "Duskreaver",
+        "Voidbeast",
+        "Hellspawn",
+        "Frostbane",
+        "Gravewalker",
+        "Blazefang",
+        "Shadowcaster",
+        "Skullcrusher",
+        "Soulreaper",
+        "Doombringer",
+        "Bloodfang",
+        "Deathbringer",
+        "Chaosspawn",
+        "Ravenshadow",
+        "Fellbeast",
+        "Whisperwind",
+        "Abyssal Terror",
+        "Venomspine",
+        "Doomhowler",
+        "Necrotalon",
+        "Eldritch Horror",
+        "Nightmare",
+        "Gravefiend",
+        "Voidspawn",
+        "Skullcrusher")
     """
     This Class was provided to us and will create a creature with a name and initialize its stats, health and armor
     """
@@ -477,7 +538,7 @@ class Warrior(Character):
             target.health[0] -= 3
             self.__mana[0] -= 2
             # if enough mana returns a damage dealt text
-            return f'{3} damage has been dealt to {target}'
+            return f'{self.__name} dealt 3 damage using karate kick against {target}'
         # Not enough mana the attack failed
         else:
             raise LowMana('Karate Kid ran out of stamina because he wrote too much code for this project')
@@ -525,7 +586,7 @@ class Mage(Character):
         if self.__mana[0] >= 5:
             target.health[0] -= rand_damage
             self.__mana[0] -= 5
-            return f'{rand_damage} damage has been dealt to {target}'
+            return f'{self.__name} dealt {rand_damage} damage using magic missile against {target}'
         else:
             raise LowMana('Gandalf ran out of mana because he is old and weak')
 
@@ -537,7 +598,7 @@ class Mage(Character):
         if self.__mana[0] >= 8:
             for i in range(len(target)):
                 target[i].health[0] -= rand_damage
-                return f'{self.__name} dealt {rand_damage} damage using FireBall'
+                return f'{self.__name} dealt {rand_damage} damage using fireball against {target}'
         else:
             raise LowMana(f'{self.__name} ran out of mana because he is old and weak')
 
@@ -548,7 +609,7 @@ class Mage(Character):
         if self.__mana[0] >= 3:
             target.health[0] -= rand_damage
             self.__mana[0] -= 3
-            return f'{self.__name} dealt {rand_damage} damage using Thunderbolt'
+            return f'{self.__name} dealt {rand_damage} damage using Thunderbolt against {target}'
         else:
             raise LowMana(f'{self.__name} ran out of mana because he is old and weak')
 
