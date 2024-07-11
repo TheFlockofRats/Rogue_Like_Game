@@ -1,6 +1,7 @@
+from __future__ import annotations
 from abc import ABC, abstractmethod
 from math import floor
-
+from typing import Optional
 from item import Item, Armor, Weapon, Condition, AttackType
 import random
 
