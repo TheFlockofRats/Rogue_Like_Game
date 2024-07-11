@@ -55,12 +55,6 @@ class TestCharacter(unittest.TestCase):
         with self.assertRaises(TypeError):
             Character([])
 
-
-    # def test_WARRIOR(self):
-    #     with self.assertRaises(ValueError):
-    #         Jeff = Warrior('jeff')
-    #         Jeff.name = ''
-
     def test_WARRIOR(self):
         with self.assertRaises(ValueError):
             Jeff = Warrior('Jeff')
@@ -77,7 +71,7 @@ class Character_Test(unittest.TestCase):
 
             result = self.warrior.karate_kick(self.creature.name)
             self.assertEqual(result, '3 damage has been dealt to US_Government')
-        
+
     def test_cast_magic_missile(self):
         with self.subTest("Testing Mage cast magic missile"):
             self.creature_name = "US_Government"
@@ -85,7 +79,7 @@ class Character_Test(unittest.TestCase):
             self.creature = Creature(self.creature_name)
             self.mage = Mage(self.mage_name)
             rand_damage = 5
-            result = self.mage.cast_magic_missile(self.creature.name, rand_damage)
+            result = self.mage.cast_magic_missile(self.creature.name)
             self.assertEqual(result, '5 damage has been dealt to US_Government')
 
     def test_cast_fire_ball(self):
@@ -95,9 +89,9 @@ class Character_Test(unittest.TestCase):
             self.creature = Creature(self.creature_name)
             self.mage = Mage(self.mage_name)
             rand_damage = 5
-            result = self.mage.cast_fire_ball(self.creature.name, rand_damage)
+            result = self.mage.cast_fire_ball(self.creature.name)
             self.assertEqual(result, 'Morty dealt 5 damage using FireBall')
-    
+
     def test_thunderbolt(self):
         with self.subTest("Testing Mage cast Thunderbolt"):
             self.creature_name = "US_Government"
@@ -105,7 +99,7 @@ class Character_Test(unittest.TestCase):
             self.creature = Creature(self.creature_name)
             self.mage = Mage(self.mage_name)
             rand_damage = 5
-            result = self.mage.cast_thunderbolt(self.creature.name, rand_damage)
+            result = self.mage.Thunderbolt(self.creature.name)
             self.assertEqual(result, 'Morty dealt 5 damage using Thunderbolt')
 
     def test_heal(self):
@@ -125,11 +119,12 @@ class Character_Test(unittest.TestCase):
             self.creature_name = "US_Government"
             self.priest_name = 'Father_Brown'
             self.creature = Creature(self.creature_name)
-            self.priest = priest(self.priest_name)
+            self.Priest = self.priest(self.priest_name)
             self.mage_name = 'Morty'
             self.mage = Mage(self.mage_name)
             result = self.priest.resurrect(self.mage)
             self.assertEqual(result, 'Morty is not dead')
+
 
 if __name__ == "__main__":
     unittest.main()
