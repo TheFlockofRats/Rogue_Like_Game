@@ -1,8 +1,12 @@
 from __future__ import annotations
+
 from typing import Optional
 from abc import ABC, abstractmethod
 from math import floor
 
+from abc import ABC, abstractmethod
+from math import floor
+from typing import Optional
 
 from item import Item, Armor, Weapon, Condition, AttackType
 import random
@@ -468,7 +472,7 @@ class Warrior(Character):
         self.__magical_stats[1] -= rand_num_magical
 
     def karate_kick(self, target: Creature):
-        # One of the three aditions that we added, check to ensure that the target has enough mana then preforms the damage
+        # One of the three additions that we added, check to ensure that the target has enough mana then preforms the damage
         if self.__mana[0] >= 2:
             target.health[0] -= 3
             self.__mana[0] -= 2
@@ -514,7 +518,7 @@ class Mage(Character):
         self.__weapon = Weapon('Practice Wand', 0, Condition.GOOD, [0, 0, 0, 0], AttackType.MAGICAL, 2)
 
     def cast_magic_missile(self, target: Creature) -> str:
-        #assigns a random damage
+        # assigns a random damage
         rand_damage = random.randint(5, 10)
         if self.__mana[0] >= 5:
             target.health[0] -= rand_damage
