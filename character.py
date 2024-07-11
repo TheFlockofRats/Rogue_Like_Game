@@ -1,5 +1,12 @@
+from __future__ import annotations
+
+from typing import Optional
 from abc import ABC, abstractmethod
 from math import floor
+
+from abc import ABC, abstractmethod
+from math import floor
+from typing import Optional
 
 from item import Item, Armor, Weapon, Condition, AttackType
 import random
@@ -114,6 +121,8 @@ class Character(ABC):
         self.__inventory = []
         self.__equipment = {'HEAD': NO_ARMOR, 'BODY': NO_ARMOR, 'HANDS': NO_ARMOR, 'LEGS': NO_ARMOR, 'FEET': NO_ARMOR}
         self.__weapon = BARE_HANDS
+        self.damage = 0
+        self.critical_strike_bool = None
 
     @property
     def name(self):
@@ -228,8 +237,28 @@ class Character(ABC):
 
     @weapon.setter
     def weapon(self, new_weapon):
-        # Sets  self.__weapon to new_weapon
+        # Sets self.__weapon to new_weapon
         self.__weapon = new_weapon
+
+    @property
+    def damage(self):
+        # returns damage
+        return self.damage
+
+    @damage.setter
+    def damage(self, new_damage):
+        # sets damage to new_damage
+        self.damage = new_damage
+
+    @property
+    def critical_strike_bool(self):
+        #returs critical_strike_bool
+        return self.critical_strike_bool
+
+    @critical_strike_bool.setter
+    # sets a new critical strike bool
+    def critical_strike_bool(self, new_critical_strike_bool):
+        self.critical_strike_bool = new_critical_strike_bool
 
     def phys_attack_modifier(self) -> int:
         """
@@ -294,16 +323,16 @@ class Character(ABC):
     def deal_damage(self) -> (int, bool):
         # This method returns the total damage given if an attack is successful and a boolean for if a critical strike was made
         d = Weapon.damage
-        damage = random.randint(1, int(d))
+        self.damage = random.randint(1, int(d))
         rand_num = random.randint(1, 100)
         # Check to ensure that the rand_num is less than the self.__critical_percentage added to self.__luck
         if rand_num <= (self.__critical_percentage + self.__luck):
-            damage = floor(damage * self.__critical_modifier)
-            critical_strike_bool = True
+            self.damage = floor(self.damage * self.__critical_modifier)
+            self.critical_strike_bool = True
         else:
-            critical_strike_bool = False
+            self.critical_strike_bool = False
         # returns damage, and the bool for if there was a critical strike
-        return damage, critical_strike_bool
+        return self.damage, self.critical_strike_bool
 
     def take_damage(self, damage) -> None:
         #  This method subtracts damage input from the temporary health of the character
@@ -312,7 +341,7 @@ class Character(ABC):
         if temp_health < 1:
             raise CharacterDeathException
 
-    def attack(self, target: Character, damage, critical_strike_bool) -> str:
+    def attack(self, target: Character) -> str:
         # This method determines if a character can attack a Creature. If it can, the character's damage is determined and dealt.
         attacker = random.randint(1, 20)
         defender = random.randint(1, 20)
@@ -332,22 +361,22 @@ class Character(ABC):
             defender += Armor.magical_attack
             defender += Armor.magical_defense
 
-        if critical_strike_bool is True:
+        if self.critical_strike_bool is True:
             # check to see if critical_strike_bool is True
             if attacker >= defender:
                 # Check to see if the attackers attack damage is greater than the defenders defense
                 target.deal_damage()
                 if target.health[0] <= 0:
                     # Check to see if target's dammage
-                    return f'{target} lost {damage} health and died with a critical hit from {self.__name}!'
+                    return f'{target} lost {self.damage} health and died with a critical hit from {self.__name}!'
                 else:
-                    return f'{target} lost {damage} health with a critical hit from {self.__name}!'
+                    return f'{target} lost {self.damage} health with a critical hit from {self.__name}!'
 
         else:
             if target.health[0] <= 0:
-                return f'{target} lost {damage} health and died from {self.__name}!'
+                return f'{target} lost {self.damage} health and died from {self.__name}!'
             else:
-                return f'{target} lost {damage} health from {self.__name}!'
+                return f'{target} lost {self.damage} health from {self.__name}!'
 
     def equip(self, item: Item, position: str = None) -> None:
         """
@@ -425,7 +454,7 @@ class Warrior(Character):
     The Warrior class is meant to create a fighter that specializes in physical combat.
     They will have a greater amount of health, a greater physical defense, but little magical defense.
     """
-    def __init__(self, char_name: str):
+    def __init__(self, char_name: str, name):
         super().__init__(char_name)
 
         # Warrior Health Stats:
@@ -443,7 +472,7 @@ class Warrior(Character):
         self.__magical_stats[1] -= rand_num_magical
 
     def karate_kick(self, target: Creature):
-        # One of the three aditions that we added, check to ensure that the target has enough mana then preforms the damage
+        # One of the three additions that we added, check to ensure that the target has enough mana then preforms the damage
         if self.__mana[0] >= 2:
             target.health[0] -= 3
             self.__mana[0] -= 2
@@ -455,8 +484,14 @@ class Warrior(Character):
 
 
 class Rouge(Character):
+    """
+    The Rogue class is meant to create a fighter that specializes in high amounts of damage.
+    They will have a greater amount of damage dealt, a greater critical damage percentage, but cannot take many hits on
+    himself.
+    """
     def __init__(self, char_name: str):
         super().__init__(char_name)
+        # Updated stats for Rogue class
         self.__luck += 10
         self.__critical_percentage = 10
         self.__critical_modifier = 2.5
@@ -468,6 +503,7 @@ class Rouge(Character):
 class Mage(Character):
     def __init__(self, char_name: str):
         super().__init__(char_name)
+        # Updated stats for Mage class
 
         rand_num_magical = random.randint(1, 3)
         self.__magical_stats[0] += rand_num_magical
@@ -482,7 +518,10 @@ class Mage(Character):
         self.__weapon = Weapon('Practice Wand', 0, Condition.GOOD, [0, 0, 0, 0], AttackType.MAGICAL, 2)
 
     def cast_magic_missile(self, target: Creature) -> str:
+        # assigns a random damage between 5-10 to rand_damage
         rand_damage = random.randint(5, 10)
+        # If you have 5 or more mana then the attack takes the damage away from the targets temp health else it will
+        # raise a lowmana exception
         if self.__mana[0] >= 5:
             target.health[0] -= rand_damage
             self.__mana[0] -= 5
@@ -491,7 +530,10 @@ class Mage(Character):
             raise LowMana('Gandalf ran out of mana because he is old and weak')
 
     def cast_fire_ball(self, target: list[Creature]) -> str:
+        # assigns random damage betweenm 10-25 to rand_damage
         rand_damage = random.randint(10, 25)
+        # if you have 8 or more damage, it deals damage to each target in the list with the for loop or else it
+        # raises a lowmana exception
         if self.__mana[0] >= 8:
             for i in range(len(target)):
                 target[i].health[0] -= rand_damage
@@ -500,7 +542,9 @@ class Mage(Character):
             raise LowMana(f'{self.__name} ran out of mana because he is old and weak')
 
     def Thunderbolt(self, target: Creature):
+        # assigns a random damage between 6 and 8 to rand_damage
         rand_damage = random.randint(6, 8)
+        # if you have 3 or more mana, you take 3 health from the targets temp health or else raise a lowmana exception
         if self.__mana[0] >= 3:
             target.health[0] -= rand_damage
             self.__mana[0] -= 3
@@ -509,12 +553,16 @@ class Mage(Character):
             raise LowMana(f'{self.__name} ran out of mana because he is old and weak')
 
 
-class priest(Character):
+class Priest(Character):
     def __init__(self, char_name):
         super().__init__(char_name)
+    # priest takes in all the base attributes and no changes are made
 
     def heal(self, target) -> str:
+        # assigns a random heal amount between 1-8 to rand_heal
         rand_heal = random.randint(1, 8)
+        # if the health of the targets temp health is above 0 and mana is 4 or above, then you add ran_heal to the
+        # temp health of the target or else it will raise InvalidTarget exception
         if target.health[0] != 0:
             if self.__mana[0] >= 4:
                 target.health[0] += rand_heal
@@ -526,6 +574,8 @@ class priest(Character):
             raise InvalidTarget(f'{target} cannot be healed!')
 
     def resurrect(self, target):
+        # if target is dead then you can bring his temp health back to half of his health else it says not enough mana
+        # or target is not dead
         if target.health[0] == 0:
             if self.__mana[0] >= 10:
                 half_health = floor(target.health[1] / 2)
@@ -538,13 +588,14 @@ class priest(Character):
             return f'{target} is not dead!'
 
     def manage_perish_affairs(self):
+        # if you have 15 mana you raise the temp and max health of yourself by 10 or else it raises lowmana exception
         if self.__mana[0] >= 15:
             self.__health[0] += 10
             self.__health[1] += 10
             self.__mana[0] -= 15
-            return f'Pastor Joe feels 20 years younger'
+            return f'{self.name} feels 20 years younger'
         else:
-            return f'Pastor Joe is out of mana and croaked'
+            raise LowMana(f'{self.name} is out of mana and croaked')
 
 
 class CharacterDeathException(Exception):

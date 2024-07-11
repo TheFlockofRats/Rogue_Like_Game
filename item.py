@@ -46,6 +46,7 @@ class Item(ABC):
         self.value = value
         self.condition = condition
 
+
     @property
     def name(self) -> str:
         """
@@ -327,6 +328,38 @@ class Weapon(Item):
         damage (int): Damage range of the weapon.
     """
 
+    WEAPONS = weapon_names = (
+        "Bloodmoon Blade",
+        "Doomhammer",
+        "Shadowstrike",
+        "Dragonfang Axe",
+        "Soulreaper Scythe",
+        "Frostbite Dagger",
+        "Stormcaller Staff",
+        "Hellfire Crossbow",
+        "Voidblade",
+        "Thunderfury",
+        "Eclipse Bow",
+        "Venomfang Spear",
+        "Mystic Wand",
+        "Runeblade",
+        "Starfall Bow",
+        "Deathbringer Sword",
+        "Celestial Staff",
+        "Infernal Cleaver",
+        "Whisperwind Bow",
+        "Dreadscythe",
+        "Dragonfire Wand",
+        "Spectral Edge",
+        "Blazefire Greatsword",
+        "Moonshadow Dagger",
+        "Riftblade",
+        "Nightfall Axe",
+        "Abyssal Trident",
+        "Soulshatterer",
+        "Harbinger of Doom",
+        "Voidcaster")
+
     def __init__(self, name: str, value: int, condition: Condition, stats: List[int], attack_type: AttackType,
                  damage: int):
         """
@@ -348,6 +381,7 @@ class Weapon(Item):
             raise ValueError
         self.__damage = damage
         self.set_stats(stats)
+
 
     @property
     def attack_type(self) -> AttackType:

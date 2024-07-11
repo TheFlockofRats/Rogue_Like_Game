@@ -118,7 +118,6 @@ class Dungeon:
             # Returns self.__creatures
             return self.__creatures
 
-
     @creatures.setter
     def creatures(self, new_creatures):
         # Check to ensure that Self.__creatures length is not more than 4, else raise ValueError
@@ -128,7 +127,7 @@ class Dungeon:
             raise ValueError
 
     @property
-    def items(self) -> list[Creature]:
+    def items(self) -> list[item]:
         # Returns self.__items
         return self.__items
 
@@ -175,17 +174,20 @@ class Dungeon:
             return False
 
     def show_items(self) -> str:
+        items = ''
         # Loop runs as many times as there is items in the list.
-        for i in range(len(self.__items)):
+        for i in self.__items:
             # If the item is armor it returns the item with -Armor after
-            if i in item.Armor:
-                return f'{self.__items[i]} - Armor'
+            if isinstance(i, Armor):
+                items += f'{i} - Armor '
             # If the item is weapon it returns the item with -Weapon after
-            if i in item.Weapon:
-                return f'{self.__items[i]} - Weapon'
+            if isinstance(i, Weapon):
+                items += f'{i} - Weapon '
             # If the item is Loot it returns the item with -Loot after
-            if i in item.Loot:
-                return f'{self.__items[i]} - Loot'
+            if isinstance(i, Loot):
+                items += f'{i} - Loot '
+
+        return items
 
     def check_item(self, item_name: str) -> bool:
         # If the item in question is in the list of items in the dungeon it returns True else returns False
