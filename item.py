@@ -179,7 +179,8 @@ class Loot(Item):
             raise TypeError
         if stats < 0:
             raise ValueError
-
+        
+        # Adjust value based on condition
         if self.condition == Condition.EXCELLENT:
             self.value = math.floor(stats * 1.25)
         elif self.condition == Condition.GOOD:
@@ -270,6 +271,7 @@ class Armor(Item):
             if not isinstance(stat, int):
                 raise ValueError
 
+        # Set the stats
         self.__physical_attack_modifier = stats[0]
         self.__physical_defense_modifier = stats[1]
         self.__magical_attack_modifier = stats[2]
@@ -279,6 +281,7 @@ class Armor(Item):
         """
         Adjust the stats of the armor based on its condition.
         """
+        # Determine the modifier based on the condition
         if self.condition == Condition.EXCELLENT:
             modifier = 1.25
         elif self.condition == Condition.GOOD:
@@ -292,6 +295,7 @@ class Armor(Item):
         else:
             modifier = 1.0
 
+        # Apply the modifier to each stat
         self.__physical_attack_modifier = math.floor(self.__physical_attack_modifier * modifier)
         self.__physical_defense_modifier = math.floor(self.__physical_defense_modifier * modifier)
         self.__magical_attack_modifier = math.floor(self.__magical_attack_modifier * modifier)
@@ -410,7 +414,8 @@ class Weapon(Item):
         for stat in stats:
             if not isinstance(stat, int):
                 raise ValueError
-
+         
+        # Set the stats
         self.__physical_attack_modifier = stats[0]
         self.__physical_defense_modifier = stats[1]
         self.__magical_attack_modifier = stats[2]
@@ -420,6 +425,8 @@ class Weapon(Item):
         """
         Adjust the stats of the weapon based on its condition.
         """
+
+# Modifier dictionary based on condition
         condition_modifiers = {
             Condition.EXCELLENT: 1.25,
             Condition.GOOD: 1.0,
@@ -430,6 +437,7 @@ class Weapon(Item):
 
         modifier = condition_modifiers[self.condition]
 
+        # Apply the modifier to each stat
         self.__physical_attack_modifier = math.floor(self.__physical_attack_modifier * modifier)
         self.__physical_defense_modifier = math.floor(self.__physical_defense_modifier * modifier)
         self.__magical_attack_modifier = math.floor(self.__magical_attack_modifier * modifier)
