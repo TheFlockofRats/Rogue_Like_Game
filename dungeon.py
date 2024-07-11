@@ -1,19 +1,8 @@
 from typing import List
 
 import item
-from character import Character
-from item import Armor, Weapon, Loot
-"""
-
-"""
-
-
-class Item:
-    pass
-
-
-class Creature:
-    pass
+from character import *
+from item import *
 
 
 class Dungeon:
@@ -83,7 +72,7 @@ class Dungeon:
 
         self.__name = name
         self.__description = description
-        self.__items: List[Item] = []
+        self.__items: List[item.Item] = []
         self.__previous: Dungeon = None
         self.__next: Dungeon = None
 
@@ -115,8 +104,8 @@ class Dungeon:
 
     @property
     def creatures(self) -> list[Creature]:
-            # Returns self.__creatures
-            return self.__creatures
+        # Returns self.__creatures
+        return self.__creatures
 
     @creatures.setter
     def creatures(self, new_creatures):

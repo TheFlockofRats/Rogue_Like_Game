@@ -11,6 +11,7 @@ from typing import Optional
 from item import Item, Armor, Weapon, Condition, AttackType
 import random
 
+
 class Character(ABC):
     """ A class that creates the character's for the game
     ...
