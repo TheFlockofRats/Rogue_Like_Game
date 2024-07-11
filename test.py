@@ -38,12 +38,29 @@ class TestItem(unittest.TestCase):
         with self.assertRaises(TypeError):
             Armor("Test Armor", 100, Condition.EXCELLENT, "AHHHH")
 
+    def test_armor_adjust_good(self):
+        armor = Armor("Test Armor", 100, Condition.GOOD, [10, 20, 5, 15])
+        armor.adjust_stats()
+        self.assertEqual(armor.physical_attack, 10)
+        self.assertEqual(armor.physical_defense, 20)
+        self.assertEqual(armor.magical_attack, 5)
+        self.assertEqual(armor.magical_defense, 15)
+
     def test_weapon_stats(self):
         with self.assertRaises(TypeError):
             Weapon("Test Weapon", 150, Condition.ACCEPTABLE, [15, 25, 10, 20], AttackType.PHYSICAL, "AHHH")
 
         with self.assertRaises(ValueError):
             Weapon("Test Weapon", 150, Condition.ACCEPTABLE, [15, 25, 10, 20], AttackType.PHYSICAL, -30)
+
+    def test_weapon_adjust_excellent(self):
+        weapon = Weapon("Test Weapon", 150, Condition.EXCELLENT, [15, 25, 10, 20], AttackType.PHYSICAL, 30)
+        weapon.adjust_stats()
+        self.assertEqual(weapon.physical_attack, 18)
+        self.assertEqual(weapon.physical_defense, 30)
+        self.assertEqual(weapon.magical_attack, 12)
+        self.assertEqual(weapon.magical_defense, 24)
+        self.assertEqual(weapon.damage, 37) 
 
 
 class TestCharacter(unittest.TestCase):
