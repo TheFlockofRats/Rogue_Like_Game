@@ -520,25 +520,25 @@ class Warrior(Character):
 
         # Warrior Health Stats:
         rand_num_health = random.randint(10, 20)
-        self.__health[0] += rand_num_health
-        self.__health[1] += rand_num_health
+        self.health[0] += rand_num_health
+        self.health[1] += rand_num_health
 
         # Warrior Physical Stats:
         rand_num_physical = random.randint(1, 4)
-        self.__physical_stats[1] += rand_num_physical
+        self.physical_stats[1] += rand_num_physical
 
         # Warrior Magical Stats:
         rand_num_magical = random.randint(0, 2)
-        self.__magical_stats[0] = 0
-        self.__magical_stats[1] -= rand_num_magical
+        self.magical_stats[0] = 0
+        self.magical_stats[1] -= rand_num_magical
 
     def karate_kick(self, target: Creature):
         # One of the three additions that we added, check to ensure that the target has enough mana then preforms the damage
-        if self.__mana[0] >= 2:
+        if self.mana[0] >= 2:
             target.health[0] -= 3
-            self.__mana[0] -= 2
+            self.mana[0] -= 2
             # if enough mana returns a damage dealt text
-            return f'{self.__name} dealt 3 damage using karate kick against {target}'
+            return f'{self.name} dealt 3 damage using karate kick against {target}'
         # Not enough mana the attack failed
         else:
             raise LowMana('Karate Kid ran out of stamina because he wrote too much code for this project')
@@ -553,12 +553,12 @@ class Rouge(Character):
     def __init__(self, char_name: str):
         super().__init__(char_name)
         # Updated stats for Rogue class
-        self.__luck += 10
-        self.__critical_percentage = 10
-        self.__critical_modifier = 2.5
-        self.__health = [20, 20]
+        self.luck += 10
+        self.critical_percentage = 10
+        self.critical_modifier = 2.5
+        self.health = [20, 20]
         rand_num_physical = random.randint(1, 3)
-        self.__physical_stats[1] -= rand_num_physical
+        self.physical_stats[1] -= rand_num_physical
 
 
 class Mage(Character):
@@ -567,26 +567,26 @@ class Mage(Character):
         # Updated stats for Mage class
 
         rand_num_magical = random.randint(1, 3)
-        self.__magical_stats[0] += rand_num_magical
+        self.magical_stats[0] += rand_num_magical
 
         rand_num_physical = random.randint(0, 2)
-        self.__physical_stats[0] = 0
-        self.__physical_stats[1] = 3 - rand_num_physical
-        self.__health = [20, 20]
+        self.physical_stats[0] = 0
+        self.physical_stats[1] = 3 - rand_num_physical
+        self.health = [20, 20]
         rand_num_mana = random.randint(10, 15)
-        self.__mana[0] += rand_num_mana
-        self.__mana[1] += rand_num_mana
-        self.__weapon = Weapon('Practice Wand', 0, Condition.GOOD, [0, 0, 0, 0], AttackType.MAGICAL, 2)
+        self.mana[0] += rand_num_mana
+        self.mana[1] += rand_num_mana
+        self.weapon = Weapon('Practice Wand', 0, Condition.GOOD, [0, 0, 0, 0], AttackType.MAGICAL, 2)
 
     def cast_magic_missile(self, target: Creature) -> str:
         # assigns a random damage between 5-10 to rand_damage
         rand_damage = random.randint(5, 10)
         # If you have 5 or more mana then the attack takes the damage away from the targets temp health else it will
         # raise a lowmana exception
-        if self.__mana[0] >= 5:
+        if self.mana[0] >= 5:
             target.health[0] -= rand_damage
-            self.__mana[0] -= 5
-            return f'{self.__name} dealt {rand_damage} damage using magic missile against {target}'
+            self.mana[0] -= 5
+            return f'{self.name} dealt {rand_damage} damage using magic missile against {target}'
         else:
             raise LowMana('Gandalf ran out of mana because he is old and weak')
 
@@ -595,21 +595,21 @@ class Mage(Character):
         rand_damage = random.randint(10, 25)
         # if you have 8 or more damage, it deals damage to each target in the list with the for loop or else it
         # raises a lowmana exception
-        if self.__mana[0] >= 8:
+        if self.mana[0] >= 8:
             for i in range(len(target)):
                 target[i].health[0] -= rand_damage
-                return f'{self.__name} dealt {rand_damage} damage using fireball against {target}'
+                return f'{self.name} dealt {rand_damage} damage using fireball against {target}'
         else:
-            raise LowMana(f'{self.__name} ran out of mana because he is old and weak')
+            raise LowMana(f'{self.name} ran out of mana because he is old and weak')
 
     def Thunderbolt(self, target: Creature):
         # assigns a random damage between 6 and 8 to rand_damage
         rand_damage = random.randint(6, 8)
         # if you have 3 or more mana, you take 3 health from the targets temp health or else raise a lowmana exception
-        if self.__mana[0] >= 3:
+        if self.mana[0] >= 3:
             target.health[0] -= rand_damage
-            self.__mana[0] -= 3
-            return f'{self.__name} dealt {rand_damage} damage using Thunderbolt against {target}'
+            self.mana[0] -= 3
+            return f'{self.name} dealt {rand_damage} damage using Thunderbolt against {target}'
         else:
             raise LowMana(f'{self.__name} ran out of mana because he is old and weak')
 
@@ -625,9 +625,9 @@ class Priest(Character):
         # if the health of the targets temp health is above 0 and mana is 4 or above, then you add ran_heal to the
         # temp health of the target or else it will raise InvalidTarget exception
         if target.health[0] != 0:
-            if self.__mana[0] >= 4:
+            if self.mana[0] >= 4:
                 target.health[0] += rand_heal
-                self.__mana[0] -= 4
+                self.mana[0] -= 4
                 return f'{target} gained {rand_heal} health!'
             else:
                 raise InvalidTarget(f'{target} cannot be healed!')
@@ -638,10 +638,10 @@ class Priest(Character):
         # if target is dead then you can bring his temp health back to half of his health else it says not enough mana
         # or target is not dead
         if target.health[0] == 0:
-            if self.__mana[0] >= 10:
+            if self.mana[0] >= 10:
                 half_health = floor(target.health[1] / 2)
                 target.health[0] += half_health
-                self.__mana[0] -= 10
+                self.mana[0] -= 10
                 return f'{target} was resurrected from the dead!'
             else:
                 return f'Not enough mana!'
@@ -650,7 +650,7 @@ class Priest(Character):
 
     def manage_perish_affairs(self):
         # if you have 15 mana you raise the temp and max health of yourself by 10 or else it raises lowmana exception
-        if self.__mana[0] >= 15:
+        if self.mana[0] >= 15:
             self.__health[0] += 10
             self.__health[1] += 10
             self.__mana[0] -= 15
