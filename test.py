@@ -124,7 +124,7 @@ class Character_Test(unittest.TestCase):
             self.creature_name = "US_Government"
             self.priest_name = 'Father_Brown'
             self.creature = Creature(self.creature_name)
-            self.priest = priest(self.priest_name)
+            self.priest = self.priest(self.priest_name)
             self.mage_name = 'Morty'
             self.mage = Mage(self.mage_name)
             rand_heal = 5
