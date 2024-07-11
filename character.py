@@ -1,5 +1,8 @@
+from __future__ import annotations
+from typing import Optional
 from abc import ABC, abstractmethod
 from math import floor
+
 
 from item import Item, Armor, Weapon, Condition, AttackType
 import random
@@ -230,22 +233,26 @@ class Character(ABC):
 
     @weapon.setter
     def weapon(self, new_weapon):
-        # Sets  self.__weapon to new_weapon
+        # Sets self.__weapon to new_weapon
         self.__weapon = new_weapon
 
     @property
     def damage(self):
+        # returns damage
         return self.damage
 
     @damage.setter
     def damage(self, new_damage):
+        # sets damage to new_damage
         self.damage = new_damage
 
     @property
     def critical_strike_bool(self):
+        #returs critical_strike_bool
         return self.critical_strike_bool
 
     @critical_strike_bool.setter
+    # sets a new critical strike bool
     def critical_strike_bool(self, new_critical_strike_bool):
         self.critical_strike_bool = new_critical_strike_bool
 
@@ -473,8 +480,14 @@ class Warrior(Character):
 
 
 class Rouge(Character):
+    """
+    The Rogue class is meant to create a fighter that specializes in high amounts of damage.
+    They will have a greater amount of damage dealt, a greater critical damage percentage, but cannot take many hits on
+    himself.
+    """
     def __init__(self, char_name: str):
         super().__init__(char_name)
+        # Updated stats for Rogue class
         self.__luck += 10
         self.__critical_percentage = 10
         self.__critical_modifier = 2.5
@@ -486,6 +499,7 @@ class Rouge(Character):
 class Mage(Character):
     def __init__(self, char_name: str):
         super().__init__(char_name)
+        # Updated stats for Mage class
 
         rand_num_magical = random.randint(1, 3)
         self.__magical_stats[0] += rand_num_magical
@@ -500,6 +514,7 @@ class Mage(Character):
         self.__weapon = Weapon('Practice Wand', 0, Condition.GOOD, [0, 0, 0, 0], AttackType.MAGICAL, 2)
 
     def cast_magic_missile(self, target: Creature) -> str:
+        #assigns a random damage
         rand_damage = random.randint(5, 10)
         if self.__mana[0] >= 5:
             target.health[0] -= rand_damage
